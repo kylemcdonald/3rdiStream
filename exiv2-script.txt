@@ -1,0 +1,9 @@
+# setting the GPS data
+
+set Exif.GPSInfo.GPSVersionID Byte 0 0 2 2
+set Exif.GPSInfo.GPSLatitudeRef Ascii N
+set Exif.GPSInfo.GPSLatitude Rational 40/1 41/1 34/1
+set Exif.GPSInfo.GPSLongitudeRef Ascii W
+set Exif.GPSInfo.GPSLongitude Rational 73/1 59/1 25/1
+set Exif.GPSInfo.GPSAltitudeRef Byte 0
+set Exif.GPSInfo.GPSAltitude Rational 57/1
