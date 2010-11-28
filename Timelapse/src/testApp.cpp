@@ -1,12 +1,27 @@
 #include "testApp.h"
 
 void testApp::setup(){
+	delayTimer.setPeriod(delay);
+	
+#ifdef USE_NETBOOK
+	camera.setDeviceID(1);
+#endif
+	
+	camera.initGrabber(camWidth, camHeight);
+	lastFrame.allocate(camWidth, camHeight, OF_IMAGE_COLOR);
 }
 
 void testApp::update(){
+	camera.grabFrame();
+	if(camera.isFrameNew() && delayTimer.tick()) {
+		int n = camWidth * camHeight * 3;
+		memcpy(lastFrame.getPixels(), camera.getPixels(), n);
+		lastFrame.update();
+	}
 }
 
 void testApp::draw(){
+	lastFrame.draw(0, 0);
 }
 
 void testApp::keyPressed(int key){
