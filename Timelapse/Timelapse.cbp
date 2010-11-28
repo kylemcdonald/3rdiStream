@@ -63,6 +63,7 @@
 			<Add directory="..\..\..\addons\ofxCurl\src\include_codeblocks" />
 			<Add directory="..\..\..\addons\ofxXmlSettings\src" />
 			<Add directory="..\..\..\addons\ofxXmlSettings\libs" />
+			<Add directory="..\..\..\addons\ofxFileHelper\src\ofxFileHelper" />
 		</Compiler>
 		<Linker>
 			<Add option="../../../libs/FreeImage/lib/win_cb/FreeImage.lib" />
@@ -111,6 +112,7 @@
 		<Unit filename="..\..\..\addons\ofxCurl\src\include_codeblocks\stdcheaders.h" />
 		<Unit filename="..\..\..\addons\ofxCurl\src\include_codeblocks\typecheck-gcc.h" />
 		<Unit filename="..\..\..\addons\ofxCurl\src\include_codeblocks\types.h" />
+		<Unit filename="..\..\..\addons\ofxFileHelper\src\ofxFileHelper\ofxFileHelper.h" />
 		<Unit filename="..\..\..\addons\ofxXmlSettings\libs\tinyxml.cpp" />
 		<Unit filename="..\..\..\addons\ofxXmlSettings\libs\tinyxml.h" />
 		<Unit filename="..\..\..\addons\ofxXmlSettings\libs\tinyxmlerror.cpp" />
