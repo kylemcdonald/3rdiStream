@@ -11,7 +11,7 @@
 		270E9A9512A22AD100CF9061 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 270E9A8F12A22AD100CF9061 /* tinyxmlerror.cpp */; };
 		270E9A9612A22AD100CF9061 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 270E9A9012A22AD100CF9061 /* tinyxmlparser.cpp */; };
 		270E9A9712A22AD100CF9061 /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 270E9A9212A22AD100CF9061 /* ofxXmlSettings.cpp */; };
-		270E9AD112A23D7400CF9061 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 270E9AD012A23D7400CF9061 /* libcurl.a */; };
+		270E9B3F12A245C400CF9061 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 270E9B1012A245C400CF9061 /* libcurl.a */; };
 		E45BE0AA0E8CC67C009D7055 /* GLee.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE0A90E8CC67C009D7055 /* GLee.a */; };
 		E45BE2E40E8CC69C009D7055 /* rtAudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE2E30E8CC69C009D7055 /* rtAudio.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
@@ -93,7 +93,18 @@
 		270E9A9012A22AD100CF9061 /* tinyxmlparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinyxmlparser.cpp; path = ../../../addons/ofxXmlSettings/libs/tinyxmlparser.cpp; sourceTree = SOURCE_ROOT; };
 		270E9A9212A22AD100CF9061 /* ofxXmlSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofxXmlSettings.cpp; path = ../../../addons/ofxXmlSettings/src/ofxXmlSettings.cpp; sourceTree = SOURCE_ROOT; };
 		270E9A9312A22AD100CF9061 /* ofxXmlSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxXmlSettings.h; path = ../../../addons/ofxXmlSettings/src/ofxXmlSettings.h; sourceTree = SOURCE_ROOT; };
-		270E9AD012A23D7400CF9061 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = ../../../addons/ofxCurl/lib/mac/libcurl.a; sourceTree = SOURCE_ROOT; };
+		270E9B1012A245C400CF9061 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = ../../../addons/ofxCurl/lib/mac/libcurl.a; sourceTree = SOURCE_ROOT; };
+		270E9B1112A245C400CF9061 /* libcurl.la */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = libcurl.la; path = ../../../addons/ofxCurl/lib/mac/libcurl.la; sourceTree = SOURCE_ROOT; };
+		270E9B1A12A245C400CF9061 /* curl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = curl.h; path = ../../../addons/ofxCurl/src/include/curl/curl.h; sourceTree = SOURCE_ROOT; };
+		270E9B1B12A245C400CF9061 /* curlbuild.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = curlbuild.h; path = ../../../addons/ofxCurl/src/include/curl/curlbuild.h; sourceTree = SOURCE_ROOT; };
+		270E9B1C12A245C400CF9061 /* curlrules.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = curlrules.h; path = ../../../addons/ofxCurl/src/include/curl/curlrules.h; sourceTree = SOURCE_ROOT; };
+		270E9B1D12A245C400CF9061 /* curlver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = curlver.h; path = ../../../addons/ofxCurl/src/include/curl/curlver.h; sourceTree = SOURCE_ROOT; };
+		270E9B1E12A245C400CF9061 /* easy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = easy.h; path = ../../../addons/ofxCurl/src/include/curl/easy.h; sourceTree = SOURCE_ROOT; };
+		270E9B1F12A245C400CF9061 /* mprintf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mprintf.h; path = ../../../addons/ofxCurl/src/include/curl/mprintf.h; sourceTree = SOURCE_ROOT; };
+		270E9B2012A245C400CF9061 /* multi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = multi.h; path = ../../../addons/ofxCurl/src/include/curl/multi.h; sourceTree = SOURCE_ROOT; };
+		270E9B2112A245C400CF9061 /* stdcheaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdcheaders.h; path = ../../../addons/ofxCurl/src/include/curl/stdcheaders.h; sourceTree = SOURCE_ROOT; };
+		270E9B2212A245C400CF9061 /* typecheck-gcc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "typecheck-gcc.h"; path = "../../../addons/ofxCurl/src/include/curl/typecheck-gcc.h"; sourceTree = SOURCE_ROOT; };
+		270E9B2312A245C400CF9061 /* types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = types.h; path = ../../../addons/ofxCurl/src/include/curl/types.h; sourceTree = SOURCE_ROOT; };
 		E45BE0390E8CC647009D7055 /* FreeImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FreeImage.h; path = ../../../libs/freeimage/include/FreeImage.h; sourceTree = SOURCE_ROOT; };
 		E45BE03F0E8CC650009D7055 /* fmod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fmod.h; path = ../../../libs/fmodex/include/fmod.h; sourceTree = SOURCE_ROOT; };
 		E45BE0400E8CC650009D7055 /* fmod.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = fmod.hpp; path = ../../../libs/fmodex/include/fmod.hpp; sourceTree = SOURCE_ROOT; };
@@ -163,7 +174,7 @@
 				E4C2429410CC5C38004149E2 /* freetype.a in Frameworks */,
 				E4C242CD10CC650E004149E2 /* libfmodex.dylib in Frameworks */,
 				E4C246DA10CCAE22004149E2 /* freeimage.a in Frameworks */,
-				270E9AD112A23D7400CF9061 /* libcurl.a in Frameworks */,
+				270E9B3F12A245C400CF9061 /* libcurl.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -206,10 +217,76 @@
 		270E9A9812A22ADB00CF9061 /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				270E9AD912A245C400CF9061 /* ofxCurl */,
 				270E9A8A12A22AD100CF9061 /* ofxXmlSettings */,
 			);
 			name = addons;
 			sourceTree = "<group>";
+		};
+		270E9AD912A245C400CF9061 /* ofxCurl */ = {
+			isa = PBXGroup;
+			children = (
+				270E9B0E12A245C400CF9061 /* lib */,
+				270E9B1712A245C400CF9061 /* src */,
+			);
+			name = ofxCurl;
+			path = ../../../addons/ofxCurl;
+			sourceTree = SOURCE_ROOT;
+		};
+		270E9B0E12A245C400CF9061 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				270E9B0F12A245C400CF9061 /* mac */,
+			);
+			name = lib;
+			path = ../../../addons/ofxCurl/lib;
+			sourceTree = SOURCE_ROOT;
+		};
+		270E9B0F12A245C400CF9061 /* mac */ = {
+			isa = PBXGroup;
+			children = (
+				270E9B1012A245C400CF9061 /* libcurl.a */,
+				270E9B1112A245C400CF9061 /* libcurl.la */,
+			);
+			name = mac;
+			path = ../../../addons/ofxCurl/lib/mac;
+			sourceTree = SOURCE_ROOT;
+		};
+		270E9B1712A245C400CF9061 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				270E9B1812A245C400CF9061 /* include */,
+			);
+			name = src;
+			path = ../../../addons/ofxCurl/src;
+			sourceTree = SOURCE_ROOT;
+		};
+		270E9B1812A245C400CF9061 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				270E9B1912A245C400CF9061 /* curl */,
+			);
+			name = include;
+			path = ../../../addons/ofxCurl/src/include;
+			sourceTree = SOURCE_ROOT;
+		};
+		270E9B1912A245C400CF9061 /* curl */ = {
+			isa = PBXGroup;
+			children = (
+				270E9B1A12A245C400CF9061 /* curl.h */,
+				270E9B1B12A245C400CF9061 /* curlbuild.h */,
+				270E9B1C12A245C400CF9061 /* curlrules.h */,
+				270E9B1D12A245C400CF9061 /* curlver.h */,
+				270E9B1E12A245C400CF9061 /* easy.h */,
+				270E9B1F12A245C400CF9061 /* mprintf.h */,
+				270E9B2012A245C400CF9061 /* multi.h */,
+				270E9B2112A245C400CF9061 /* stdcheaders.h */,
+				270E9B2212A245C400CF9061 /* typecheck-gcc.h */,
+				270E9B2312A245C400CF9061 /* types.h */,
+			);
+			name = curl;
+			path = ../../../addons/ofxCurl/src/include/curl;
+			sourceTree = SOURCE_ROOT;
 		};
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
@@ -272,7 +349,6 @@
 		E45BE0480E8CC657009D7055 /* core libraries */ = {
 			isa = PBXGroup;
 			children = (
-				270E9AD012A23D7400CF9061 /* libcurl.a */,
 				E4C2425B10CC5A78004149E2 /* glut */,
 				E45BEC7B0E8CC911009D7055 /* poco */,
 				E45BE2D50E8CC69C009D7055 /* rtAudio */,
@@ -676,6 +752,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_15)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../libs/freeimage/lib/osx\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_14 = "\"$(SRCROOT)/../../../libs/fmodex/lib/osx\"";
@@ -685,6 +762,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/../../../libs/GLee/lib/osx\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5 = "\"$(SRCROOT)/../../../libs/poco/lib/osx\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6 = "\"$(SRCROOT)/../../../libs/rtAudio/lib/osx\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7 = "\"$(SRCROOT)/../../../addons/ofxCurl/lib/win\"";
 				PREBINDING = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)Universal";
 				WRAPPER_EXTENSION = app;
@@ -799,6 +877,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_15)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../libs/freeimage/lib/osx\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_14 = "\"$(SRCROOT)/../../../libs/fmodex/lib/osx\"";
@@ -808,6 +887,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/../../../libs/GLee/lib/osx\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5 = "\"$(SRCROOT)/../../../libs/poco/lib/osx\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6 = "\"$(SRCROOT)/../../../libs/rtAudio/lib/osx\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7 = "\"$(SRCROOT)/../../../addons/ofxCurl/lib/win\"";
 				PREBINDING = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)Debug";
 				WRAPPER_EXTENSION = app;
@@ -850,6 +930,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_15)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../libs/freeimage/lib/osx\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_14 = "\"$(SRCROOT)/../../../libs/fmodex/lib/osx\"";
@@ -859,6 +940,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/../../../libs/GLee/lib/osx\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5 = "\"$(SRCROOT)/../../../libs/poco/lib/osx\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6 = "\"$(SRCROOT)/../../../libs/rtAudio/lib/osx\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7 = "\"$(SRCROOT)/../../../addons/ofxCurl/lib/win\"";
 				PREBINDING = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
