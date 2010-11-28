@@ -1,1 +1,8 @@
 This isn't really a single program, but a loose collection of demos for different techniques that all come together to get a photo off the camera, geotagged, and uploaded to a server.
+
+Timestamp uses:
+
+https://github.com/ofTheo/ofxFileHelper
+https://github.com/roxlu/ofxCurl/
+
+Both checked out into openFrameworks/addons.
