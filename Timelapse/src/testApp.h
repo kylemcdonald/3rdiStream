@@ -4,6 +4,7 @@
 #include "DelayTimer.h"
 #include "FtpUpdate.h"
 #include "ofxXmlSettings.h"
+#include "ofxFileHelper.h"
 
 class testApp : public ofBaseApp{
 public:
@@ -15,7 +16,9 @@ public:
 	void disableCamera();
 	bool grabFrame();
 	void saveLastFrame();
+	string getDaystamp();
 	string getTimestamp();
+	void ensureDirectory(string path, bool relativeToData = true);
 
 	ofVideoGrabber camera;
 	ofImage lastFrame, lastFrameResized;

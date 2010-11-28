@@ -67,26 +67,44 @@ bool testApp::grabFrame() {
 	}
 }
 
+string testApp::getDaystamp() {
+	stringstream daystamp;
+	daystamp << ofGetMonth() << "-";
+	daystamp << ofGetDay() << "-";
+	daystamp << ofGetYear();
+	return daystamp.str();
+}
+
 string testApp::getTimestamp() {
 	stringstream timestamp;
-	timestamp << ofGetMonth() << "-";
-	timestamp << ofGetDay() << "-";
-	timestamp << ofGetYear() << "-";
 	timestamp << ofGetHours() << "-";
 	timestamp << ofGetMinutes() << "-";
 	timestamp << ofGetSeconds();
 	return timestamp.str();
 }
 
+void testApp::ensureDirectory(string path, bool relativeToData) {
+	if(!ofxFileHelper::doesDirectoryExist(path, relativeToData)) {
+		ofxFileHelper::makeDirectory(path, relativeToData);
+	}
+}
+
 void testApp::saveLastFrame() {
+	string daystamp = getDaystamp();
 	string timestamp = getTimestamp();
 
-	lastFrame.saveImage("3rdiStream/original/" + timestamp + ".jpg");
+	string originalBase = "3rdiStream/original/" + daystamp;
+	ensureDirectory(originalBase);
+	lastFrame.saveImage(originalBase + "/" + timestamp + ".jpg");
+	lastFrame.update();
 
 	lastFrameResized.clone(lastFrame);
 	lastFrameResized.resize(resizedWidth, resizedHeight);
+	
+	string resizedBase = "3rdiStream/resized/" + daystamp;
+	ensureDirectory(resizedBase);
+	lastFrameResized.saveImage(resizedBase + "/" + timestamp + ".jpg");
 	lastFrameResized.update();
-	lastFrameResized.saveImage("3rdiStream/resized/" + timestamp + ".jpg");
 }
 
 void testApp::disableCamera() {

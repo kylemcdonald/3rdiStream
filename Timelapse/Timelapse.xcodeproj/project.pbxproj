@@ -105,6 +105,7 @@
 		270E9B2112A245C400CF9061 /* stdcheaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdcheaders.h; path = ../../../addons/ofxCurl/src/include/curl/stdcheaders.h; sourceTree = SOURCE_ROOT; };
 		270E9B2212A245C400CF9061 /* typecheck-gcc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "typecheck-gcc.h"; path = "../../../addons/ofxCurl/src/include/curl/typecheck-gcc.h"; sourceTree = SOURCE_ROOT; };
 		270E9B2312A245C400CF9061 /* types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = types.h; path = ../../../addons/ofxCurl/src/include/curl/types.h; sourceTree = SOURCE_ROOT; };
+		270E9BBE12A2A5B300CF9061 /* ofxFileHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxFileHelper.h; path = ../../../addons/ofxFileHelper/src/ofxFileHelper/ofxFileHelper.h; sourceTree = SOURCE_ROOT; };
 		E45BE0390E8CC647009D7055 /* FreeImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FreeImage.h; path = ../../../libs/freeimage/include/FreeImage.h; sourceTree = SOURCE_ROOT; };
 		E45BE03F0E8CC650009D7055 /* fmod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fmod.h; path = ../../../libs/fmodex/include/fmod.h; sourceTree = SOURCE_ROOT; };
 		E45BE0400E8CC650009D7055 /* fmod.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = fmod.hpp; path = ../../../libs/fmodex/include/fmod.hpp; sourceTree = SOURCE_ROOT; };
@@ -217,6 +218,7 @@
 		270E9A9812A22ADB00CF9061 /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				270E9BBD12A2A5B300CF9061 /* ofxFileHelper */,
 				270E9AD912A245C400CF9061 /* ofxCurl */,
 				270E9A8A12A22AD100CF9061 /* ofxXmlSettings */,
 			);
@@ -286,6 +288,15 @@
 			);
 			name = curl;
 			path = ../../../addons/ofxCurl/src/include/curl;
+			sourceTree = SOURCE_ROOT;
+		};
+		270E9BBD12A2A5B300CF9061 /* ofxFileHelper */ = {
+			isa = PBXGroup;
+			children = (
+				270E9BBE12A2A5B300CF9061 /* ofxFileHelper.h */,
+			);
+			name = ofxFileHelper;
+			path = ../../../addons/ofxFileHelper/src/ofxFileHelper;
 			sourceTree = SOURCE_ROOT;
 		};
 		BB4B014C10F69532006C3DED /* addons */ = {
