@@ -111,6 +111,8 @@ void testApp::disableCamera() {
 }
 
 void testApp::draw(){
+    ofBackground(0, 0, 0);
+    ofSetColor(255);
 	lastFrame.draw(0, 0);
 }
 
