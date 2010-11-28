@@ -11,13 +11,16 @@ public:
 	
 	void enableCamera();
 	void disableCamera();
-	bool saveFrame();
+	bool grabFrame();
+	void saveLastFrame();
+	string getTimestamp();
 	
 	ofVideoGrabber camera;
-	ofImage lastFrame;
+	ofImage lastFrame, lastFrameResized;
 	
-	static const int camWidth = 640;
-	static const int camHeight = 480;
+	int camWidth, camHeight;
+	int resizedWidth, resizedHeight;
+	
 #ifdef USE_NETBOOK
 	static const float delay = 60;
 #else

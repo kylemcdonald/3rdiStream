@@ -3,6 +3,11 @@
 void testApp::setup(){
 	ofSetLogLevel(OF_LOG_VERBOSE);
 	
+	camWidth = 640;
+	camHeight = 480;
+	resizedWidth = 320;
+	resizedHeight = 240;
+	
 	delayTimer.setPeriod(delay);
 	
 #ifdef USE_NETBOOK
@@ -17,7 +22,7 @@ void testApp::update(){
 	if(delayTimer.tick()) {
 		ofLog(OF_LOG_VERBOSE, "Timer ticked.");
 		enableCamera();
-		saveFrame();
+		grabFrame();
 		disableCamera();
 	}
 }
@@ -25,7 +30,7 @@ void testApp::update(){
 void testApp::enableCamera() {
 }
 
-bool testApp::saveFrame() {
+bool testApp::grabFrame() {
 	float startWaiting = ofGetElapsedTimef();
 	while(true) {
 		ofLog(OF_LOG_VERBOSE, "Grabbing frame from camera.");
@@ -34,9 +39,8 @@ bool testApp::saveFrame() {
 		
 		if(camera.isFrameNew()) {
 			ofLog(OF_LOG_VERBOSE, "Copying frame to lastFrame: " + ofToString(waitingTime));
-			int n = camWidth * camHeight * 3;
-			memcpy(lastFrame.getPixels(), camera.getPixels(), n);
-			lastFrame.update();
+			lastFrame.setFromPixels(camera.getPixels(), camWidth, camHeight, OF_IMAGE_COLOR);
+			saveLastFrame();
 			return true;
 		}
 		
@@ -47,6 +51,28 @@ bool testApp::saveFrame() {
 		
 		ofSleepMillis(cameraFrameWait);
 	}
+}
+
+string testApp::getTimestamp() {
+	stringstream timestamp;
+	timestamp << ofGetMonth() << "-";
+	timestamp << ofGetDay() << "-";
+	timestamp << ofGetYear() << "-";
+	timestamp << ofGetHours() << "-";
+	timestamp << ofGetMinutes() << "-";
+	timestamp << ofGetSeconds();
+	return timestamp.str();
+}
+
+void testApp::saveLastFrame() {
+	string timestamp = getTimestamp();
+
+	lastFrame.saveImage("original/" + timestamp + ".jpg");
+	
+	lastFrameResized.clone(lastFrame);
+	lastFrameResized.resize(resizedWidth, resizedHeight);
+	lastFrameResized.update();
+	lastFrameResized.saveImage("resized/" + timestamp + ".jpg");
 }
 
 void testApp::disableCamera() {
