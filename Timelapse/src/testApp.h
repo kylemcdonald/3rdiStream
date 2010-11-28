@@ -26,11 +26,7 @@ public:
 	int camWidth, camHeight;
 	int resizedWidth, resizedHeight;
 
-#ifdef USE_NETBOOK
-	static const float delay = 2;
-#else
-	static const float delay = 1;
-#endif
+    float delay;
 	DelayTimer delayTimer;
 
 	// This is how long the app waits between successive attempts at getting a new frame.

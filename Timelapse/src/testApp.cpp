@@ -2,18 +2,26 @@
 
 void testApp::setup(){
 	ofSetLogLevel(OF_LOG_VERBOSE);
-
-	camWidth = 640;
-	camHeight = 480;
-	resizedWidth = 320;
-	resizedHeight = 240;
+	
+	ofxXmlSettings cameraSettings;
+	cameraSettings.loadFile("cameraSettings.xml");
+#ifdef USE_NETBOOK
+    cameraSettings.pushTag("netbook");
+#else
+    cameraSettings.pushTag("debug");
+#endif
+    int deviceId = cameraSettings.getValue("deviceId", 0);
+    camWidth = cameraSettings.getValue("camWidth", 0);
+    camHeight = cameraSettings.getValue("camHeight", 0);
+    delay = cameraSettings.getValue("delay", 0.);
+    cameraSettings.popTag();
+    
+	resizedWidth = camWidth / 2;
+	resizedHeight = camHeight / 2;
 
 	delayTimer.setPeriod(delay);
 
-#ifdef USE_NETBOOK
-	camera.setDeviceID(1);
-#endif
-
+	camera.setDeviceID(deviceId);
 	camera.initGrabber(camWidth, camHeight);
 	lastFrame.allocate(camWidth, camHeight, OF_IMAGE_COLOR);
 	
