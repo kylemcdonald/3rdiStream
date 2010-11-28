@@ -13,13 +13,15 @@ void testApp::setup(){
     int deviceId = cameraSettings.getValue("deviceId", 0);
     camWidth = cameraSettings.getValue("camWidth", 0);
     camHeight = cameraSettings.getValue("camHeight", 0);
-    delay = cameraSettings.getValue("delay", 0.);
+    photoInterval = cameraSettings.getValue("photoInterval", 0.);
+    uploadInterval = cameraSettings.getValue("uploadInterval", 0.);
     cameraSettings.popTag();
     
 	resizedWidth = camWidth / 2;
 	resizedHeight = camHeight / 2;
 
-	delayTimer.setPeriod(delay);
+	photoTimer.setPeriod(photoInterval);
+	uploadTimer.setPeriod(uploadInterval);
 
 	camera.setDeviceID(deviceId);
 	camera.initGrabber(camWidth, camHeight);
@@ -41,11 +43,14 @@ void testApp::setup(){
 }
 
 void testApp::update(){
-	if(delayTimer.tick()) {
+	if(photoTimer.tick()) {
 		ofLog(OF_LOG_VERBOSE, "Timer ticked.");
 		enableCamera();
 		grabFrame();
 		disableCamera();
+	}
+	if(uploadTimer.tick()) {
+	    system("cd data & ftpsync-resized.bat & cd ..");
 	}
 }
 

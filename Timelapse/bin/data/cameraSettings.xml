@@ -2,13 +2,13 @@
 	<deviceId>1</deviceId>
 	<camWidth>1280</camWidth>
 	<camHeight>720</camHeight>
-	<delay>2</delay>
-	<uploadRate>10</uploadRate>
+	<photoInterval>60</photoInterval>
+	<uploadInterval>240</uploadInterval>
 </netbook>
 <debug>
 	<deviceId>0</deviceId>
 	<camWidth>640</camWidth>
 	<camHeight>480</camHeight>
-	<delay>1</delay>
-	<uploadRate>3600</uploadRate>	
+	<photoInterval>1</photoInterval>
+	<uploadInterval>3600</uploadInterval>	
 </debug>

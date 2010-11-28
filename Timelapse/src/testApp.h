@@ -26,8 +26,11 @@ public:
 	int camWidth, camHeight;
 	int resizedWidth, resizedHeight;
 
-    float delay;
-	DelayTimer delayTimer;
+    float photoInterval;
+	DelayTimer photoTimer;
+	
+	float uploadInterval;
+	DelayTimer uploadTimer;
 
 	// This is how long the app waits between successive attempts at getting a new frame.
 	static const int cameraFrameWait = 50; // in milliseconds
