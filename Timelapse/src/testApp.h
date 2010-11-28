@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "DelayTimer.h"
+#include "FtpUpdate.h"
 
 class testApp : public ofBaseApp{
 public:
