@@ -24,7 +24,13 @@ void testApp::setup(){
 	string username = serverSettings.getValue("username", "");
 	string password = serverSettings.getValue("password", "");
 	ofLog(OF_LOG_VERBOSE, "Using FTP server " + username + "@" + address + " password: " + password);
-	//ftpUpdate.setup(string address, <#string username#>, string password, <#string localDirectory#>, <#string remoteDirectory#>)
+	ftpUpdate.setup(address, username, password);
+	
+	ofxXmlSettings transferSettings;
+	transferSettings.loadFile("transferSettings.xml");
+	string localDirectory = transferSettings.getValue("localDirectory", "");
+	string remoteDirectory = transferSettings.getValue("remoteDirectory", "");
+	ftpUpdate.update(localDirectory, remoteDirectory);
 }
 
 void testApp::update(){
