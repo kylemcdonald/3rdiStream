@@ -94,6 +94,7 @@
 			<Add option="-lws2_32" />
 			<Add option="-lIphlpapi" />
 			<Add library="..\..\..\addons\ofxCurl\lib\win\libcurl.a" />
+			<Add library="..\..\..\addons\ofxCurl\lib\win\libcurldll.a" />
 		</Linker>
 		<ExtraCommands>
 			<Add after='xcopy /e /i /y &quot;$(PROJECT_DIR)..\..\..\export\win_cb\*.dll&quot;  &quot;$(PROJECT_DIR)bin&quot;' />

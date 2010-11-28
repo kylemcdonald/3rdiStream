@@ -81,12 +81,12 @@ string testApp::getTimestamp() {
 void testApp::saveLastFrame() {
 	string timestamp = getTimestamp();
 
-	lastFrame.saveImage("original/" + timestamp + ".jpg");
+	lastFrame.saveImage("3rdiStream/original/" + timestamp + ".jpg");
 
 	lastFrameResized.clone(lastFrame);
 	lastFrameResized.resize(resizedWidth, resizedHeight);
 	lastFrameResized.update();
-	lastFrameResized.saveImage("resized/" + timestamp + ".jpg");
+	lastFrameResized.saveImage("3rdiStream/resized/" + timestamp + ".jpg");
 }
 
 void testApp::disableCamera() {
