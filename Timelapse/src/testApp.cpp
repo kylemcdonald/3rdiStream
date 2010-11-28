@@ -2,20 +2,19 @@
 
 void testApp::setup(){
 	ofSetLogLevel(OF_LOG_VERBOSE);
-	
+
 	camWidth = 640;
 	camHeight = 480;
 	resizedWidth = 320;
 	resizedHeight = 240;
-	
+
 	delayTimer.setPeriod(delay);
-	
+
 #ifdef USE_NETBOOK
 	camera.setDeviceID(1);
 #endif
-	
+
 	camera.initGrabber(camWidth, camHeight);
-	lastFrame.allocate(camWidth, camHeight, OF_IMAGE_COLOR);
 }
 
 void testApp::update(){
@@ -36,19 +35,19 @@ bool testApp::grabFrame() {
 		ofLog(OF_LOG_VERBOSE, "Grabbing frame from camera.");
 		camera.grabFrame();
 		float waitingTime = ofGetElapsedTimef() - startWaiting;
-		
+
 		if(camera.isFrameNew()) {
 			ofLog(OF_LOG_VERBOSE, "Copying frame to lastFrame: " + ofToString(waitingTime));
 			lastFrame.setFromPixels(camera.getPixels(), camWidth, camHeight, OF_IMAGE_COLOR);
 			saveLastFrame();
 			return true;
 		}
-		
+
 		if(waitingTime > maxWaitingTime) {
 			ofLog(OF_LOG_VERBOSE, "Had to quit, took too long to wait: " + ofToString(waitingTime));
 			return false;
 		}
-		
+
 		ofSleepMillis(cameraFrameWait);
 	}
 }
@@ -68,7 +67,7 @@ void testApp::saveLastFrame() {
 	string timestamp = getTimestamp();
 
 	lastFrame.saveImage("original/" + timestamp + ".jpg");
-	
+
 	lastFrameResized.clone(lastFrame);
 	lastFrameResized.resize(resizedWidth, resizedHeight);
 	lastFrameResized.update();
