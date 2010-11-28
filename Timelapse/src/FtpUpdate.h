@@ -1,6 +1,6 @@
 #pragma once
 
-#include "curl/curl.h"
+#include "curl.h"
 
 class FtpUpdate {
 protected:
@@ -14,5 +14,7 @@ public:
 	}
 	void update(string localDirectory, string remoteDirectory) {
 		ofLog(OF_LOG_VERBOSE, "Updating " + address + "/" + remoteDirectory + " from " + localDirectory);
+		curl_global_init(CURL_GLOBAL_ALL);
+		curl_global_cleanup();
 	}
 };
