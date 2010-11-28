@@ -5,7 +5,6 @@
 		<Option title="Timelapse" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="addons\;src\;" />
 		<Build>
 			<Target title="release">
 				<Option output="bin\$(PROJECT_NAME)" prefix_auto="1" extension_auto="1" />
@@ -61,6 +60,9 @@
 			<Add directory="..\..\..\libs\openFrameworks\video" />
 			<Add directory="..\..\..\libs\openFrameworks\communication" />
 			<Add directory="..\..\..\libs\poco\include" />
+			<Add directory="..\..\..\addons\ofxCurl\src\include_codeblocks" />
+			<Add directory="..\..\..\addons\ofxXmlSettings\src" />
+			<Add directory="..\..\..\addons\ofxXmlSettings\libs" />
 		</Compiler>
 		<Linker>
 			<Add option="../../../libs/FreeImage/lib/win_cb/FreeImage.lib" />
@@ -91,22 +93,34 @@
 			<Add option="-lwsock32" />
 			<Add option="-lws2_32" />
 			<Add option="-lIphlpapi" />
+			<Add library="..\..\..\addons\ofxCurl\lib\win\libcurl.a" />
 		</Linker>
 		<ExtraCommands>
 			<Add after='xcopy /e /i /y &quot;$(PROJECT_DIR)..\..\..\export\win_cb\*.dll&quot;  &quot;$(PROJECT_DIR)bin&quot;' />
 			<Add after='cmd /c if not exist &quot;$(PROJECT_DIR)bin/data&quot; mkdir &quot;$(PROJECT_DIR)bin/data&quot;' />
 			<Mode after="always" />
 		</ExtraCommands>
+		<Unit filename="..\..\..\addons\ofxCurl\src\include_codeblocks\curl.h" />
+		<Unit filename="..\..\..\addons\ofxCurl\src\include_codeblocks\curlbuild.h" />
+		<Unit filename="..\..\..\addons\ofxCurl\src\include_codeblocks\curlrules.h" />
+		<Unit filename="..\..\..\addons\ofxCurl\src\include_codeblocks\curlver.h" />
+		<Unit filename="..\..\..\addons\ofxCurl\src\include_codeblocks\easy.h" />
+		<Unit filename="..\..\..\addons\ofxCurl\src\include_codeblocks\mprintf.h" />
+		<Unit filename="..\..\..\addons\ofxCurl\src\include_codeblocks\multi.h" />
+		<Unit filename="..\..\..\addons\ofxCurl\src\include_codeblocks\stdcheaders.h" />
+		<Unit filename="..\..\..\addons\ofxCurl\src\include_codeblocks\typecheck-gcc.h" />
+		<Unit filename="..\..\..\addons\ofxCurl\src\include_codeblocks\types.h" />
+		<Unit filename="..\..\..\addons\ofxXmlSettings\libs\tinyxml.cpp" />
+		<Unit filename="..\..\..\addons\ofxXmlSettings\libs\tinyxml.h" />
+		<Unit filename="..\..\..\addons\ofxXmlSettings\libs\tinyxmlerror.cpp" />
+		<Unit filename="..\..\..\addons\ofxXmlSettings\libs\tinyxmlparser.cpp" />
+		<Unit filename="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.cpp" />
+		<Unit filename="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.h" />
 		<Unit filename="src\DelayTimer.h" />
-		<Unit filename="src\main.cpp">
-			<Option virtualFolder="src\" />
-		</Unit>
-		<Unit filename="src\testApp.cpp">
-			<Option virtualFolder="src\" />
-		</Unit>
-		<Unit filename="src\testApp.h">
-			<Option virtualFolder="src\" />
-		</Unit>
+		<Unit filename="src\FtpUpdate.h" />
+		<Unit filename="src\main.cpp" />
+		<Unit filename="src\testApp.cpp" />
+		<Unit filename="src\testApp.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "curl/curl.h"
+#include "curl.h"
 
 class FtpUpdate {
 protected:
