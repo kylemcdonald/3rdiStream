@@ -41,6 +41,7 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wno-multichar" />
+			<Add option="-DUSE_NETBOOK" />
 			<Add directory="..\..\..\libs\glu\include" />
 			<Add directory="..\..\..\libs\freetype\include" />
 			<Add directory="..\..\..\libs\freetype\include\freetype2" />
@@ -96,6 +97,7 @@
 			<Add after='cmd /c if not exist &quot;$(PROJECT_DIR)bin/data&quot; mkdir &quot;$(PROJECT_DIR)bin/data&quot;' />
 			<Mode after="always" />
 		</ExtraCommands>
+		<Unit filename="src\DelayTimer.h" />
 		<Unit filename="src\main.cpp">
 			<Option virtualFolder="src\" />
 		</Unit>

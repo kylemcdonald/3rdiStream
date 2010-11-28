@@ -8,7 +8,7 @@
  Set it up with setFramerate() or setPeriod() (in seconds).
  Then call tick() to find out whether the timer has ticked
  since the last time you checked.
- 
+
  setUseBuffer(true) means tick() will return true multiple times
  when multiple ticks have passed without you checking.
  */
@@ -41,7 +41,7 @@ public:
 		int lastTicks = (int) (lastTime / period);
 		lastTime = curTime;
 		ticks += curTicks - lastTicks;
-		if(ticks) {
+		if(ticks > 0) {
 			if(useBuffer) {
 				ticks--;
 			} else {
