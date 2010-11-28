@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		270E9A9412A22AD100CF9061 /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 270E9A8D12A22AD100CF9061 /* tinyxml.cpp */; };
+		270E9A9512A22AD100CF9061 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 270E9A8F12A22AD100CF9061 /* tinyxmlerror.cpp */; };
+		270E9A9612A22AD100CF9061 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 270E9A9012A22AD100CF9061 /* tinyxmlparser.cpp */; };
+		270E9A9712A22AD100CF9061 /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 270E9A9212A22AD100CF9061 /* ofxXmlSettings.cpp */; };
 		E45BE0AA0E8CC67C009D7055 /* GLee.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE0A90E8CC67C009D7055 /* GLee.a */; };
 		E45BE2E40E8CC69C009D7055 /* rtAudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE2E30E8CC69C009D7055 /* rtAudio.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
@@ -81,6 +85,13 @@
 		270E997612A1BD4B00CF9061 /* Timelapse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Timelapse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		270E998212A1C27400CF9061 /* DelayTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DelayTimer.h; path = src/DelayTimer.h; sourceTree = SOURCE_ROOT; };
 		270E9A4212A21E6000CF9061 /* FtpUpdate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FtpUpdate.h; sourceTree = "<group>"; };
+		270E9A8B12A22AD100CF9061 /* install.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = install.xml; path = ../../../addons/ofxXmlSettings/install.xml; sourceTree = SOURCE_ROOT; };
+		270E9A8D12A22AD100CF9061 /* tinyxml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinyxml.cpp; path = ../../../addons/ofxXmlSettings/libs/tinyxml.cpp; sourceTree = SOURCE_ROOT; };
+		270E9A8E12A22AD100CF9061 /* tinyxml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tinyxml.h; path = ../../../addons/ofxXmlSettings/libs/tinyxml.h; sourceTree = SOURCE_ROOT; };
+		270E9A8F12A22AD100CF9061 /* tinyxmlerror.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinyxmlerror.cpp; path = ../../../addons/ofxXmlSettings/libs/tinyxmlerror.cpp; sourceTree = SOURCE_ROOT; };
+		270E9A9012A22AD100CF9061 /* tinyxmlparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinyxmlparser.cpp; path = ../../../addons/ofxXmlSettings/libs/tinyxmlparser.cpp; sourceTree = SOURCE_ROOT; };
+		270E9A9212A22AD100CF9061 /* ofxXmlSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofxXmlSettings.cpp; path = ../../../addons/ofxXmlSettings/src/ofxXmlSettings.cpp; sourceTree = SOURCE_ROOT; };
+		270E9A9312A22AD100CF9061 /* ofxXmlSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxXmlSettings.h; path = ../../../addons/ofxXmlSettings/src/ofxXmlSettings.h; sourceTree = SOURCE_ROOT; };
 		E45BE0390E8CC647009D7055 /* FreeImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FreeImage.h; path = ../../../libs/freeimage/include/FreeImage.h; sourceTree = SOURCE_ROOT; };
 		E45BE03F0E8CC650009D7055 /* fmod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fmod.h; path = ../../../libs/fmodex/include/fmod.h; sourceTree = SOURCE_ROOT; };
 		E45BE0400E8CC650009D7055 /* fmod.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = fmod.hpp; path = ../../../libs/fmodex/include/fmod.hpp; sourceTree = SOURCE_ROOT; };
@@ -156,6 +167,47 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		270E9A8A12A22AD100CF9061 /* ofxXmlSettings */ = {
+			isa = PBXGroup;
+			children = (
+				270E9A8B12A22AD100CF9061 /* install.xml */,
+				270E9A8C12A22AD100CF9061 /* libs */,
+				270E9A9112A22AD100CF9061 /* src */,
+			);
+			name = ofxXmlSettings;
+			path = ../../../addons/ofxXmlSettings;
+			sourceTree = SOURCE_ROOT;
+		};
+		270E9A8C12A22AD100CF9061 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				270E9A8D12A22AD100CF9061 /* tinyxml.cpp */,
+				270E9A8E12A22AD100CF9061 /* tinyxml.h */,
+				270E9A8F12A22AD100CF9061 /* tinyxmlerror.cpp */,
+				270E9A9012A22AD100CF9061 /* tinyxmlparser.cpp */,
+			);
+			name = libs;
+			path = ../../../addons/ofxXmlSettings/libs;
+			sourceTree = SOURCE_ROOT;
+		};
+		270E9A9112A22AD100CF9061 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				270E9A9212A22AD100CF9061 /* ofxXmlSettings.cpp */,
+				270E9A9312A22AD100CF9061 /* ofxXmlSettings.h */,
+			);
+			name = src;
+			path = ../../../addons/ofxXmlSettings/src;
+			sourceTree = SOURCE_ROOT;
+		};
+		270E9A9812A22ADB00CF9061 /* addons */ = {
+			isa = PBXGroup;
+			children = (
+				270E9A8A12A22AD100CF9061 /* ofxXmlSettings */,
+			);
+			name = addons;
+			sourceTree = "<group>";
+		};
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
@@ -343,6 +395,7 @@
 		E4B69B4A0A3A1720003C02F2 = {
 			isa = PBXGroup;
 			children = (
+				270E9A9812A22ADB00CF9061 /* addons */,
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
 				E4C2422310CC54B6004149E2 /* openFrameworks */,
@@ -527,6 +580,10 @@
 			files = (
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* testApp.cpp in Sources */,
+				270E9A9412A22AD100CF9061 /* tinyxml.cpp in Sources */,
+				270E9A9512A22AD100CF9061 /* tinyxmlerror.cpp in Sources */,
+				270E9A9612A22AD100CF9061 /* tinyxmlparser.cpp in Sources */,
+				270E9A9712A22AD100CF9061 /* ofxXmlSettings.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

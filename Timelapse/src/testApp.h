@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "DelayTimer.h"
 #include "FtpUpdate.h"
+#include "ofxXmlSettings.h"
 
 class testApp : public ofBaseApp{
 public:
@@ -32,6 +33,8 @@ public:
 	// This is how long the app waits between successive attempts at getting a new frame.
 	static const int cameraFrameWait = 50; // in milliseconds
 	static const float maxWaitingTime = 5; // in seconds
+	
+	FtpUpdate ftpUpdate;
 	
 	void keyPressed(int key);
 	void keyReleased(int key);
