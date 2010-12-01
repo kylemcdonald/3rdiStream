@@ -27,6 +27,7 @@ void testApp::setup(){
 	camera.initGrabber(camWidth, camHeight);
 	lastFrame.allocate(camWidth, camHeight, OF_IMAGE_COLOR);
 	
+	/*
 	ofxXmlSettings serverSettings;
 	serverSettings.loadFile("serverSettings.xml");
 	string address = serverSettings.getValue("address", "");
@@ -40,6 +41,7 @@ void testApp::setup(){
 	string localDirectory = transferSettings.getValue("localDirectory", "");
 	string remoteDirectory = transferSettings.getValue("remoteDirectory", "");
 	ftpUpdate.update(localDirectory, remoteDirectory);
+	 */
 }
 
 void testApp::update(){
@@ -50,7 +52,9 @@ void testApp::update(){
 		disableCamera();
 	}
 	if(uploadTimer.tick()) {
-	    system("cd data & ftpsync-resized.bat & cd ..");
+#ifdef USE_NETBOOK
+		system("cd data & ftpsync-resized.bat & cd ..");
+#endif
 	}
 }
 
@@ -97,9 +101,13 @@ string testApp::getTimestamp() {
 }
 
 void testApp::ensureDirectory(string path, bool relativeToData) {
-	if(!ofxFileHelper::doesDirectoryExist(path, relativeToData)) {
-		ofxFileHelper::makeDirectory(path, relativeToData);
+	if(relativeToData) {
+		path = ofToDataPath(path);
 	}
+	File file(path);
+	// createDirectories will not overwrite, but it will create
+	// all necessary parent directories
+	file.createDirectories();
 }
 
 void testApp::saveLastFrame() {
