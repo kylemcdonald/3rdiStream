@@ -34,7 +34,7 @@ public:
 	DelayTimer uploadTimer;
 
 	// This is how long the app waits between successive attempts at getting a new frame.
-	static const int cameraFrameWait = 50; // in milliseconds
+	static const int cameraFrameWait = 100; // in milliseconds
 	static const float maxWaitingTime = 5; // in seconds
 	
 	ofSerial gpsSerialData;

@@ -9,6 +9,6 @@
 	<deviceId>0</deviceId>
 	<camWidth>640</camWidth>
 	<camHeight>480</camHeight>
-	<photoInterval>1</photoInterval>
-	<uploadInterval>3600</uploadInterval>	
+	<photoInterval>5</photoInterval>
+	<uploadInterval>240</uploadInterval>	
 </debug>
