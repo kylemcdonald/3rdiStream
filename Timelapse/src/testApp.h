@@ -6,6 +6,7 @@
 #include "ofxXmlSettings.h"
 #include "ofxFileHelper.h"
 #include "GpsData.h"
+#include "Poco/DateTimeFormatter.h"
 
 class testApp : public ofBaseApp{
 public:

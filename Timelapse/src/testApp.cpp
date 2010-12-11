@@ -101,19 +101,27 @@ void testApp::stopCapture() {
 }
 
 string testApp::getDaystamp() {
+    Poco::Timestamp curTime;
+    return Poco::DateTimeFormatter::format(curTime, "%m-%d-%Y");
+    /*
 	stringstream daystamp;
 	daystamp << ofGetMonth() << "-";
 	daystamp << ofGetDay() << "-";
 	daystamp << ofGetYear();
 	return daystamp.str();
+	*/
 }
 
 string testApp::getTimestamp() {
+    Poco::Timestamp curTime;
+    return Poco::DateTimeFormatter::format(curTime, "%H-%M-%S");
+    /*
 	stringstream timestamp;
 	timestamp << ofGetHours() << "-";
 	timestamp << ofGetMinutes() << "-";
 	timestamp << ofGetSeconds();
 	return timestamp.str();
+	*/
 }
 
 void testApp::ensureDirectory(string path, bool relativeToData) {
