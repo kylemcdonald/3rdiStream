@@ -1,14 +1,16 @@
 <netbook>
 	<deviceId>1</deviceId>
-	<camWidth>1280</camWidth>
-	<camHeight>720</camHeight>
+	<camWidth>640</camWidth>
+	<camHeight>480</camHeight>
 	<photoInterval>60</photoInterval>
 	<uploadInterval>240</uploadInterval>
+	<photoTimeout>30</photoTimeout>
 </netbook>
 <debug>
 	<deviceId>0</deviceId>
 	<camWidth>640</camWidth>
 	<camHeight>480</camHeight>
 	<photoInterval>5</photoInterval>
-	<uploadInterval>240</uploadInterval>	
+	<uploadInterval>240</uploadInterval>
+	<photoTimeout>4/photoTimeout>	
 </debug>

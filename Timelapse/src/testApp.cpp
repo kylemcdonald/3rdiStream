@@ -10,20 +10,24 @@ void testApp::setup(){
 #else
 	cameraSettings.pushTag("debug");
 #endif
-	int deviceId = cameraSettings.getValue("deviceId", 0);
+    deviceId = cameraSettings.getValue("deviceId", 0);
 	camWidth = cameraSettings.getValue("camWidth", 0);
 	camHeight = cameraSettings.getValue("camHeight", 0);
 	photoInterval = cameraSettings.getValue("photoInterval", 0.);
+	photoTimeout = cameraSettings.getValue("photoTimeout", 0.);
 	uploadInterval = cameraSettings.getValue("uploadInterval", 0.);
 	cameraSettings.popTag();
+	
+	ofSetFrameRate(1000. / cameraFrameWait);
 	
 	resizedWidth = camWidth / 2;
 	resizedHeight = camHeight / 2;
 	
 	photoTimer.setPeriod(photoInterval);
 	uploadTimer.setPeriod(uploadInterval);
+	camera.listDevices();
+	startCapture();
 	
-	camera.setDeviceID(deviceId);
 	lastFrame.allocate(camWidth, camHeight, OF_IMAGE_COLOR);
 	
 #ifdef USE_NETBOOK
@@ -49,46 +53,50 @@ void testApp::setup(){
 
 void testApp::update(){
 	if(photoTimer.tick()) {
-		ofLog(OF_LOG_VERBOSE, "Timer ticked.");
-		enableCamera();
-		grabFrame();
-		disableCamera();
+		ofLog(OF_LOG_VERBOSE, "photoTimer ticked.");
+		startCapture();
 	}
+	
+	grabFrame();
+	
 	if(uploadTimer.tick()) {
 #ifdef USE_NETBOOK
+        ofLog(OF_LOG_VERBOSE, "uploadTimer ticked.");
 		system("cd data & ftpsync-resized.bat & cd ..");
 #endif
 	}
 }
 
-void testApp::enableCamera() {
+void testApp::startCapture() {
+    capturing = true;
+	camera.setDeviceID(deviceId);
 	camera.initGrabber(camWidth, camHeight);
+	cout << "done with initGrabber" << endl;
+    startWaiting = ofGetElapsedTimef();
 }
 
-bool testApp::grabFrame() {
-	float startWaiting = ofGetElapsedTimef();
-	while(true) {
-		float waitingTime = ofGetElapsedTimef() - startWaiting;
-		ofLog(OF_LOG_VERBOSE, "Grabbing frame from camera: " + ofToString(waitingTime));
-		camera.grabFrame();
-		
-		if(camera.isFrameNew()) {
-			ofLog(OF_LOG_VERBOSE, "Copying frame to lastFrame.");
-			lastFrame.setFromPixels(camera.getPixels(), camWidth, camHeight, OF_IMAGE_COLOR);
-			saveLastFrame();
-			return true;
-		}
-		
-		if(waitingTime > maxWaitingTime) {
-			ofLog(OF_LOG_VERBOSE, "Had to quit, took too long to wait.");
-			return false;
-		}
-		
-		ofSleepMillis(cameraFrameWait);
-	}
+void testApp::grabFrame() {
+    if(capturing) {
+        float waitingTime = ofGetElapsedTimef() - startWaiting;
+        ofLog(OF_LOG_VERBOSE, "Grabbing frame from camera: " + ofToString(waitingTime));
+        camera.grabFrame();
+        
+        if(camera.isFrameNew()) {
+            ofLog(OF_LOG_VERBOSE, "Copying frame to lastFrame.");
+            lastFrame.setFromPixels(camera.getPixels(), camWidth, camHeight, OF_IMAGE_COLOR);
+            saveLastFrame();
+            stopCapture();
+        }
+        
+        if(waitingTime > photoTimeout) {
+            ofLog(OF_LOG_VERBOSE, "Had to quit, took too long to wait.");
+            stopCapture();
+        }
+    }
 }
 
-void testApp::disableCamera() {
+void testApp::stopCapture() {
+    capturing = false;
 	camera.close();
 }
 
@@ -139,7 +147,8 @@ void testApp::saveLastFrame() {
 void testApp::draw(){
 	ofBackground(0, 0, 0);
 	ofSetColor(255);
-	lastFrame.draw(0, 0);
+	lastFrame.update();
+	lastFrame.draw(0, 0, ofGetWidth() / 2, ofGetHeight());
 }
 
 void testApp::keyPressed(int key){

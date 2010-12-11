@@ -13,9 +13,9 @@ public:
 	void update();
 	void draw();
 
-	void enableCamera();
-	void disableCamera();
-	bool grabFrame();
+	void startCapture();
+	void stopCapture();
+	void grabFrame();
 	void saveLastFrame();
 	string getDaystamp();
 	string getTimestamp();
@@ -24,6 +24,7 @@ public:
 	ofVideoGrabber camera;
 	ofImage lastFrame, lastFrameResized;
 
+    int deviceId;
 	int camWidth, camHeight;
 	int resizedWidth, resizedHeight;
 
@@ -32,10 +33,12 @@ public:
 	
 	float uploadInterval;
 	DelayTimer uploadTimer;
+	float startWaiting;
+	bool capturing;
 
 	// This is how long the app waits between successive attempts at getting a new frame.
 	static const int cameraFrameWait = 100; // in milliseconds
-	static const float maxWaitingTime = 5; // in seconds
+    float photoTimeout;
 	
 	ofSerial gpsSerialData;
 	GpsData gpsData;
