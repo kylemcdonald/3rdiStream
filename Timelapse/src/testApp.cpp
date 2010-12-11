@@ -35,11 +35,17 @@ void testApp::setup(){
 	ofLog(OF_LOG_VERBOSE, "Using FTP server " + username + "@" + address + " password: " + password);
 	ftpUpdate.setup(address, username, password);
 	
+	/*
 	ofxXmlSettings transferSettings;
 	transferSettings.loadFile("transferSettings.xml");
 	string localDirectory = transferSettings.getValue("localDirectory", "");
 	string remoteDirectory = transferSettings.getValue("remoteDirectory", "");
 	ftpUpdate.update(localDirectory, remoteDirectory);
+	*/
+	
+#ifdef USE_NETBOOK
+    gpsSerialData.setup(5, 9600); // mayeb not 5
+#endif
 }
 
 void testApp::update(){

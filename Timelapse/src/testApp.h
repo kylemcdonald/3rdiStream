@@ -5,6 +5,7 @@
 #include "FtpUpdate.h"
 #include "ofxXmlSettings.h"
 #include "ofxFileHelper.h"
+#include "GpsData.h"
 
 class testApp : public ofBaseApp{
 public:
@@ -35,6 +36,10 @@ public:
 	// This is how long the app waits between successive attempts at getting a new frame.
 	static const int cameraFrameWait = 50; // in milliseconds
 	static const float maxWaitingTime = 5; // in seconds
+	
+	ofSerial gpsSerialData;
+	GpsData gpsData;
+	string nmeaMessage;
 	
 	FtpUpdate ftpUpdate;
 	
