@@ -9,17 +9,21 @@
 class GpsLog : public ofxThread {
 protected:
     ofSerial gpsSerialData;
-	GpsData gpsData;
+	
+	GpsData workingData, stableData;
+	string nmeaMessage;
 	
     void threadedFunction() {
         while(isThreadRunning()) {
-            string nmeaMessage = readLine();
-            cout << "incoming: " << nmeaMessage << endl;
-            if(gpsData.parseOutput(nmeaMessage)) {
+            nmeaMessage = readLine();
+            if(workingData.parseOutput(nmeaMessage)) {
+                stableData = workingData;
+                /*
 				cout << gpsData.hours << ":" << gpsData.minutes << ":" << gpsData.seconds << endl;
 				cout << "latitude: " << gpsData.latDegrees << " degrees " << gpsData.latMinutes << "' " << gpsData.latReference << endl;
 				cout << "longitude: " << gpsData.lonDegrees << " degrees " << gpsData.lonMinutes << "' " << gpsData.lonReference << endl;
 				cout << "altitude: " << gpsData.altitude << " m" << endl;
+				*/
             }
         }
     }
@@ -40,10 +44,21 @@ protected:
         }
         return available;
     }
-public:
+public:	
+    ~GpsLog() {
+        gpsSerialData.close();
+    }
     void setup() {
-#ifdef USE_NETBOOK
-        gpsSerialData.setup(5, 9600); // mayeb not 5?
-#endif
+        if(!gpsSerialData.setup(5, 9600)) {
+            ofLog(OF_LOG_FATAL_ERROR, "Cannot connect to the GPS stream. Try closing and re-opening GPS control.");
+        } else {
+            ofLog(OF_LOG_VERBOSE, "Connected to internal GPS stream.");
+        }
+    }
+    const GpsData& getData() {
+        return stableData;
+    }
+    const string& getLatestMessage() {
+        return nmeaMessage;
     }
 };

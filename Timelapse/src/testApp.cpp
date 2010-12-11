@@ -32,24 +32,26 @@ void testApp::setup(){
 	
 	lastFrame.allocate(camWidth, camHeight, OF_IMAGE_COLOR);
 
-	/*
-	 ofxXmlSettings serverSettings;
-	 serverSettings.loadFile("serverSettings.xml");
-	 string address = serverSettings.getValue("address", "");
-	 string username = serverSettings.getValue("username", "");
-	 string password = serverSettings.getValue("password", "");
-	 ofLog(OF_LOG_VERBOSE, "Using FTP server " + username + "@" + address + " password: " + password);
-	 ftpUpdate.setup(address, username, password);
-	 
-	 ofxXmlSettings transferSettings;
-	 transferSettings.loadFile("transferSettings.xml");
-	 string localDirectory = transferSettings.getValue("localDirectory", "");
-	 string remoteDirectory = transferSettings.getValue("remoteDirectory", "");
-	 ftpUpdate.update(localDirectory, remoteDirectory);
-	 */
-	 
-	 gps.setup();
-	 gps.startThread();
+    /*
+    ofxXmlSettings serverSettings;
+    serverSettings.loadFile("serverSettings.xml");
+    string address = serverSettings.getValue("address", "");
+    string username = serverSettings.getValue("username", "");
+    string password = serverSettings.getValue("password", "");
+    ofLog(OF_LOG_VERBOSE, "Using FTP server " + username + "@" + address + " password: " + password);
+    ftpUpdate.setup(address, username, password);
+
+    ofxXmlSettings transferSettings;
+    transferSettings.loadFile("transferSettings.xml");
+    string localDirectory = transferSettings.getValue("localDirectory", "");
+    string remoteDirectory = transferSettings.getValue("remoteDirectory", "");
+    ftpUpdate.update(localDirectory, remoteDirectory);
+    */
+
+#ifdef USE_NETBOOK
+    gps.setup();
+    gps.startThread();
+#endif
 }
 
 void testApp::update(){
@@ -155,6 +157,29 @@ void testApp::draw(){
 	ofBackground(0, 0, 0);
 	ofSetColor(255);
 	lastFrame.draw(0, 0);
+	/*
+    cout << "latitude: " << gpsData.latDegrees << " degrees " << gpsData.latMinutes << "' " << gpsData.latReference << endl;
+    cout << "longitude: " << gpsData.lonDegrees << " degrees " << gpsData.lonMinutes << "' " << gpsData.lonReference << endl;
+    cout << "altitude: " << gpsData.altitude << " m" << endl;
+    */
+				
+#ifdef USE_NETBOOK
+    const GpsData& gpsData = gps.getData();
+    stringstream gpsTime, gpsPosition;
+    gpsTime << gpsData.hours << ":" << gpsData.minutes << ":" << gpsData.seconds;
+    gpsPosition << gpsData.latDegrees << "° " << gpsData.latMinutes << "' " << gpsData.latReference << ", " <<
+        gpsData.lonDegrees << "° " << gpsData.lonMinutes << "' " << gpsData.lonReference;
+    string status;
+    if(gpsData.ready()) {
+        status = "has fix";
+    } else {
+        status = "no fix";
+    }
+    ofDrawBitmapString("gps state: " + status, 10, 20);
+    ofDrawBitmapString("gps input: " + gps.getLatestMessage(), 10, 40);
+	ofDrawBitmapString("gps time: " + gpsTime.str(), 10, 60);
+	ofDrawBitmapString("gps position: " + gpsPosition.str(), 10, 80);
+#endif
 }
 
 void testApp::keyPressed(int key){

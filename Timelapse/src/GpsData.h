@@ -96,7 +96,7 @@ public:
 		return ready();
 	}
 	
-	bool ready() {
+	bool ready() const {
 		return complete && satellites > 0;
 	}
 };
