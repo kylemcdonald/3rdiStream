@@ -1,6 +1,8 @@
 #include "testApp.h"
 
 void testApp::setup(){
+    ofDisableArbTex();v
+    
 	ofSetLogLevel(OF_LOG_VERBOSE);
 	
 	ofxXmlSettings cameraSettings;
@@ -71,7 +73,6 @@ void testApp::startCapture() {
     capturing = true;
 	camera.setDeviceID(deviceId);
 	camera.initGrabber(camWidth, camHeight);
-	cout << "done with initGrabber" << endl;
     startWaiting = ofGetElapsedTimef();
 }
 
@@ -141,7 +142,6 @@ void testApp::saveLastFrame() {
 	string originalBase = "3rdiStream/original/" + daystamp;
 	ensureDirectory(originalBase);
 	lastFrame.saveImage(originalBase + "/" + timestamp + ".jpg");
-	lastFrame.update();
 	
 	lastFrameResized.clone(lastFrame);
 	lastFrameResized.resize(resizedWidth, resizedHeight);
@@ -149,14 +149,13 @@ void testApp::saveLastFrame() {
 	string resizedBase = "3rdiStream/resized/" + daystamp;
 	ensureDirectory(resizedBase);
 	lastFrameResized.saveImage(resizedBase + "/" + timestamp + ".jpg");
-	lastFrameResized.update();
 }
 
 void testApp::draw(){
 	ofBackground(0, 0, 0);
 	ofSetColor(255);
-	lastFrame.update();
-	lastFrame.draw(0, 0, ofGetWidth() / 2, ofGetHeight());
+	lastFrameResized.update();
+	lastFrameResized.draw(0, 0);
 }
 
 void testApp::keyPressed(int key){
