@@ -71,10 +71,13 @@ void testApp::update(){
 }
 
 void testApp::startCapture() {
-    capturing = true;
-	camera.setDeviceID(deviceId);
-	camera.initGrabber(camWidth, camHeight);
-    startWaiting = ofGetElapsedTimef();
+    if(!capturing) {
+        camera.setDeviceID(deviceId);
+        if(camera.initGrabber(camWidth, camHeight)) {
+            startWaiting = ofGetElapsedTimef();
+            capturing = true;
+        }
+    }
 }
 
 void testApp::grabFrame() {
@@ -91,7 +94,7 @@ void testApp::grabFrame() {
         }
         
         if(waitingTime > photoTimeout) {
-            ofLog(OF_LOG_VERBOSE, "Had to quit, took too long to wait.");
+            ofLog(OF_LOG_VERBOSE, "Had to quit, camera is not responding.");
             stopCapture();
         }
     }
@@ -126,6 +129,28 @@ string testApp::getTimestamp() {
 	*/
 }
 
+bool testApp::makeExivScript(string scriptFile) {
+    GpsData gpsData = gps.getData();
+    if(!gpsData.ready()) {
+        return false;
+    }
+    fstream out;
+    out.open(scriptFile.c_str(), ios_base::out | ios_base::trunc);
+    out << "set Exif.GPSInfo.GPSVersionID Byte 0 0 2 2" << endl;
+    out << "set Exif.GPSInfo.GPSLatitudeRef Ascii " << gpsData.latReference << endl;
+    out << "set Exif.GPSInfo.GPSLatitude Rational " << gpsData.latDegrees << "/1 " <<
+        (int) gpsData.latMinutes << "/1 " <<
+        (int) (fmodf(gpsData.latMinutes, 1) * 60) << "/1" << endl;
+    out << "set Exif.GPSInfo.GPSLongitudeRef Ascii " << gpsData.lonReference << endl;
+    out << "set Exif.GPSInfo.GPSLongitude Rational " << gpsData.lonDegrees << "/1 " <<
+        (int) gpsData.lonMinutes << "/1 " <<
+        (int) (fmodf(gpsData.lonMinutes, 1) * 60) << "/1" << endl;
+    out << "set Exif.GPSInfo.GPSAltitudeRef Byte " << (gpsData.altitude > 0 ? "0" : "1") << endl;
+    out << "set Exif.GPSInfo.GPSAltitude Rational " << (int) (gpsData.altitude) << "/1" << endl;
+    out.close();
+    return true;
+}
+
 void testApp::ensureDirectory(string path, bool relativeToData) {
 	if(relativeToData) {
 		path = ofToDataPath(path);
@@ -142,7 +167,8 @@ void testApp::saveLastFrame() {
 	
 	string originalBase = "3rdiStream/original/" + daystamp;
 	ensureDirectory(originalBase);
-	lastFrame.saveImage(originalBase + "/" + timestamp + ".jpg");
+	string originalLocation = originalBase + "/" + timestamp + ".jpg";
+	lastFrame.saveImage(originalLocation);
 	lastFrame.update();
 	
 	lastFrameResized.clone(lastFrame);
@@ -150,19 +176,23 @@ void testApp::saveLastFrame() {
 	
 	string resizedBase = "3rdiStream/resized/" + daystamp;
 	ensureDirectory(resizedBase);
-	lastFrameResized.saveImage(resizedBase + "/" + timestamp + ".jpg");
+	string resizedLocation = resizedBase + "/" + timestamp + ".jpg";
+	lastFrameResized.saveImage(resizedLocation);
+	
+	string scriptFile = "exiv2-gps.txt";
+	if(makeExivScript(scriptFile)) {
+	    string originalCommand = "exiv2 -m " + scriptFile + " " + ofToDataPath(originalLocation);
+	    string resizedCommand = "exiv2 -m " + scriptFile + " " + ofToDataPath(resizedLocation);
+        system(originalCommand.c_str());
+        system(resizedCommand.c_str());
+	}
 }
 
 void testApp::draw(){
 	ofBackground(0, 0, 0);
 	ofSetColor(255);
 	lastFrame.draw(0, 0);
-	/*
-    cout << "latitude: " << gpsData.latDegrees << " degrees " << gpsData.latMinutes << "' " << gpsData.latReference << endl;
-    cout << "longitude: " << gpsData.lonDegrees << " degrees " << gpsData.lonMinutes << "' " << gpsData.lonReference << endl;
-    cout << "altitude: " << gpsData.altitude << " m" << endl;
-    */
-				
+	
 #ifdef USE_NETBOOK
     const GpsData& gpsData = gps.getData();
     stringstream gpsTime, gpsPosition;

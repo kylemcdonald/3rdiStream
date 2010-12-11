@@ -20,6 +20,8 @@ public:
 	string getDaystamp();
 	string getTimestamp();
 	void ensureDirectory(string path, bool relativeToData = true);
+	
+	bool makeExivScript(string scriptFile);
 
 	ofVideoGrabber camera;
 	ofImage lastFrame, lastFrameResized;
