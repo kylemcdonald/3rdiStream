@@ -2,9 +2,9 @@
 	<deviceId>1</deviceId>
 	<camWidth>640</camWidth>
 	<camHeight>480</camHeight>
-	<photoInterval>60</photoInterval>
+	<photoInterval>10</photoInterval>
 	<uploadInterval>240</uploadInterval>
-	<photoTimeout>30</photoTimeout>
+	<photoTimeout>8</photoTimeout>
 </netbook>
 <debug>
 	<deviceId>0</deviceId>

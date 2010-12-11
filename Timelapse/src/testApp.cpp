@@ -1,7 +1,7 @@
 #include "testApp.h"
 
 void testApp::setup(){
-    ofDisableArbTex();v
+    ofDisableArbTex();
     
 	ofSetLogLevel(OF_LOG_VERBOSE);
 	
@@ -31,10 +31,6 @@ void testApp::setup(){
 	startCapture();
 	
 	lastFrame.allocate(camWidth, camHeight, OF_IMAGE_COLOR);
-	
-#ifdef USE_NETBOOK
-    gpsSerialData.setup(5, 9600); // mayeb not 5
-#endif
 
 	/*
 	 ofxXmlSettings serverSettings;
@@ -51,6 +47,9 @@ void testApp::setup(){
 	 string remoteDirectory = transferSettings.getValue("remoteDirectory", "");
 	 ftpUpdate.update(localDirectory, remoteDirectory);
 	 */
+	 
+	 gps.setup();
+	 gps.startThread();
 }
 
 void testApp::update(){
@@ -142,6 +141,7 @@ void testApp::saveLastFrame() {
 	string originalBase = "3rdiStream/original/" + daystamp;
 	ensureDirectory(originalBase);
 	lastFrame.saveImage(originalBase + "/" + timestamp + ".jpg");
+	lastFrame.update();
 	
 	lastFrameResized.clone(lastFrame);
 	lastFrameResized.resize(resizedWidth, resizedHeight);
@@ -154,8 +154,7 @@ void testApp::saveLastFrame() {
 void testApp::draw(){
 	ofBackground(0, 0, 0);
 	ofSetColor(255);
-	lastFrameResized.update();
-	lastFrameResized.draw(0, 0);
+	lastFrame.draw(0, 0);
 }
 
 void testApp::keyPressed(int key){

@@ -6,12 +6,12 @@ class GpsData {
 protected:
 	vector<string> split(const string &source, char separator) {
 		vector<string> elements;
-    stringstream stream(source);
-    string item;
-    while(getline(stream, item, separator)) {
-			elements.push_back(item);
-    }
-    return elements;
+        stringstream stream(source);
+        string item;
+        while(getline(stream, item, separator)) {
+                elements.push_back(item);
+        }
+        return elements;
 	}
 
 	bool complete;
@@ -55,6 +55,7 @@ public:
 	float seconds;
 	int latDegrees, lonDegrees;
 	float latMinutes, lonMinutes;
+	string latReference, lonReference;
 	float altitude;
 	float heading;
 	float knots;
@@ -72,24 +73,19 @@ public:
 	complete(false) {
 	}
 	
-	void parseOutput(string sentence) {
+	bool parseOutput(string sentence) {
 		vector<string> tokens = split(sentence, ',');
+		complete = false;
 		if(tokens.size() > 10 && tokens[0] == "$GPGGA") {
 			satellites = ofToInt(tokens[7]);
 			if(satellites > 0) {
 				parseTime(tokens[1], hours, minutes, seconds);
 				parseLatitude(tokens[2], latDegrees, latMinutes);
 				parseLongitude(tokens[4], lonDegrees, lonMinutes);
-				string latReference = tokens[3];
-				string lonReference = tokens[5];
+                latReference = tokens[3];
+                lonReference = tokens[5];
 				altitude = ofToFloat(tokens[9]);
-				
-				cout << hours << ":" << minutes << ":" << seconds << endl;
-				cout << "latitude: " << latDegrees << " degrees " << latMinutes << "' " << latReference << endl;
-				cout << "longitude: " << lonDegrees << " degrees " << lonMinutes << "' " << lonReference << endl;
-				cout << "altitude: " << altitude << " m" << endl;
 			}
-			complete = false;
 		}
 		if(tokens.size() > 10 && tokens[0] == "$GPRMC") {
 			knots = ofToFloat(tokens[7]);
@@ -97,6 +93,7 @@ public:
 			parseDate(tokens[9]);
 			complete = true;
 		}
+		return ready();
 	}
 	
 	bool ready() {

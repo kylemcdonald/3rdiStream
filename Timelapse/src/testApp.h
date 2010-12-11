@@ -2,10 +2,9 @@
 
 #include "ofMain.h"
 #include "DelayTimer.h"
-#include "FtpUpdate.h"
+#include "GpsLog.h"
 #include "ofxXmlSettings.h"
 #include "ofxFileHelper.h"
-#include "GpsData.h"
 #include "Poco/DateTimeFormatter.h"
 
 class testApp : public ofBaseApp{
@@ -41,11 +40,7 @@ public:
 	static const int cameraFrameWait = 100; // in milliseconds
     float photoTimeout;
 	
-	ofSerial gpsSerialData;
-	GpsData gpsData;
-	string nmeaMessage;
-	
-	FtpUpdate ftpUpdate;
+	GpsLog gps;
 	
 	void keyPressed(int key);
 	void keyReleased(int key);
