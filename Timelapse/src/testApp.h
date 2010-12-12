@@ -6,6 +6,7 @@
 #include "ofxXmlSettings.h"
 #include "ofxFileHelper.h"
 #include "Poco/DateTimeFormatter.h"
+#include "ofxIds.h" 
 
 class testApp : public ofBaseApp{
 public:
@@ -43,6 +44,8 @@ public:
     float photoTimeout;
 	
 	GpsLog gps;
+	
+	ofxIds ids;
 	
 	void keyPressed(int key);
 	void keyReleased(int key);

@@ -1,6 +1,9 @@
 #include "testApp.h"
 
 void testApp::setup(){
+    ids.OpenCamera();
+    ids.CloseCamera();
+    
     ofDisableArbTex();
     
 	ofSetLogLevel(OF_LOG_VERBOSE);
