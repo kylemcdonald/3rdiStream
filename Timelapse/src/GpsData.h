@@ -15,7 +15,6 @@ protected:
 	}
 
 	bool complete;
-	int satellites;
 	
 	void readFixedWidth(stringstream& stream, int width, int& val) {
 		char str[width + 1];
@@ -60,6 +59,7 @@ public:
 	float heading;
 	float knots;
 	int dayOfMonth, month, year;
+	int satellites;
 	
 	GpsData() :
 	hours(0), minutes(0), seconds(0),
@@ -77,7 +77,10 @@ public:
 		vector<string> tokens = split(sentence, ',');
 		complete = false;
 		if(tokens.size() > 10 && tokens[0] == "$GPGGA") {
-			satellites = ofToInt(tokens[7]);
+            satellites = 0;
+		    if(tokens[7].size() > 0) {
+                satellites = ofToInt(tokens[7]);
+		    }
 			if(satellites > 0) {
 				parseTime(tokens[1], hours, minutes, seconds);
 				parseLatitude(tokens[2], latDegrees, latMinutes);

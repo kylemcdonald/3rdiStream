@@ -1,9 +1,6 @@
 #include "testApp.h"
 
 void testApp::setup(){
-    ids.OpenCamera();
-    ids.CloseCamera();
-    
     ofDisableArbTex();
     
 	ofSetLogLevel(OF_LOG_VERBOSE);
@@ -16,24 +13,35 @@ void testApp::setup(){
 	cameraSettings.pushTag("debug");
 #endif
     deviceId = cameraSettings.getValue("deviceId", 0);
-	camWidth = cameraSettings.getValue("camWidth", 0);
-	camHeight = cameraSettings.getValue("camHeight", 0);
+	float resize = cameraSettings.getValue("resize", 0.);
 	photoInterval = cameraSettings.getValue("photoInterval", 0.);
 	photoTimeout = cameraSettings.getValue("photoTimeout", 0.);
 	uploadInterval = cameraSettings.getValue("uploadInterval", 0.);
+	useIds = cameraSettings.getValue("useIds", 0);
+	gpsTimeout = cameraSettings.getValue("gpsTimeout", 1.);
 	cameraSettings.popTag();
 	
 	ofSetFrameRate(1000. / cameraFrameWait);
 	
-	resizedWidth = camWidth / 2;
-	resizedHeight = camHeight / 2;
-	
 	photoTimer.setPeriod(photoInterval);
 	uploadTimer.setPeriod(uploadInterval);
-	camera.listDevices();
-	startCapture();
 	
-	lastFrame.allocate(camWidth, camHeight, OF_IMAGE_COLOR);
+	if(useIds) {
+	    camWidth = 3264;
+	    camHeight = 2448;
+	} else {
+        camera.listDevices();
+        camWidth = 640;
+        camHeight = 480;
+	}
+	resizedWidth = camWidth / resize;
+	resizedHeight = camHeight / resize;
+	
+	ofLog(OF_LOG_VERBOSE, "resized to " + ofToString(resizedWidth) + "x" + ofToString(resizedHeight));
+	
+	lastFrame.setUseTexture(false);
+	
+	startCapture();
 
     /*
     ofxXmlSettings serverSettings;
@@ -75,8 +83,14 @@ void testApp::update(){
 
 void testApp::startCapture() {
     if(!capturing) {
-        camera.setDeviceID(deviceId);
-        if(camera.initGrabber(camWidth, camHeight)) {
+        bool success = false;
+        if(useIds) {
+            success = ids.OpenCamera();
+	    } else {
+	        camera.setDeviceID(deviceId);
+	        success = camera.initGrabber(camWidth, camHeight);
+	    }
+	    if(success) {
             startWaiting = ofGetElapsedTimef();
             capturing = true;
         }
@@ -87,25 +101,38 @@ void testApp::grabFrame() {
     if(capturing) {
         float waitingTime = ofGetElapsedTimef() - startWaiting;
         ofLog(OF_LOG_VERBOSE, "Grabbing frame from camera: " + ofToString(waitingTime));
-        camera.grabFrame();
         
-        if(camera.isFrameNew()) {
-            ofLog(OF_LOG_VERBOSE, "Copying frame to lastFrame.");
-            lastFrame.setFromPixels(camera.getPixels(), camWidth, camHeight, OF_IMAGE_COLOR);
+        if(useIds) {
+            ids.snapImage(lastFrame);
+            waitingTime = ofGetElapsedTimef() - startWaiting;
+            ofLog(OF_LOG_VERBOSE, "Grabbed from via IDS API." + ofToString(waitingTime));
             saveLastFrame();
             stopCapture();
-        }
-        
-        if(waitingTime > photoTimeout) {
-            ofLog(OF_LOG_VERBOSE, "Had to quit, camera is not responding.");
-            stopCapture();
+        } else {
+            camera.grabFrame();
+            
+            if(camera.isFrameNew()) {
+                ofLog(OF_LOG_VERBOSE, "Copying frame to lastFrame.");
+                lastFrame.setFromPixels(camera.getPixels(), camWidth, camHeight, OF_IMAGE_COLOR);
+                saveLastFrame();
+                stopCapture();
+            }
+            
+            if(waitingTime > photoTimeout) {
+                ofLog(OF_LOG_VERBOSE, "Had to quit, camera is not responding.");
+                stopCapture();
+            }
         }
     }
 }
 
 void testApp::stopCapture() {
+    if(useIds) {
+        ids.CloseCamera();
+    } else {
+        camera.close();
+    }
     capturing = false;
-	camera.close();
 }
 
 string testApp::getDaystamp() {
@@ -168,13 +195,14 @@ void testApp::saveLastFrame() {
 	string daystamp = getDaystamp();
 	string timestamp = getTimestamp();
 	
+	ofLog(OF_LOG_VERBOSE, "saving images to " + daystamp + "/" + timestamp);
+	
 	string originalBase = "3rdiStream/original/" + daystamp;
 	ensureDirectory(originalBase);
 	string originalLocation = originalBase + "/" + timestamp + ".jpg";
 	lastFrame.saveImage(originalLocation);
-	lastFrame.update();
 	
-	lastFrameResized.clone(lastFrame);
+	lastFrameResized.setFromPixels(lastFrame.getPixels(), lastFrame.getWidth(), lastFrame.getHeight(), OF_IMAGE_COLOR);
 	lastFrameResized.resize(resizedWidth, resizedHeight);
 	
 	string resizedBase = "3rdiStream/resized/" + daystamp;
@@ -184,34 +212,51 @@ void testApp::saveLastFrame() {
 	
 	string scriptFile = "exiv2-gps.txt";
 	if(makeExivScript(scriptFile)) {
+	    ofLog(OF_LOG_VERBOSE, "embedding GPS data");
 	    string originalCommand = "exiv2 -m " + scriptFile + " " + ofToDataPath(originalLocation);
 	    string resizedCommand = "exiv2 -m " + scriptFile + " " + ofToDataPath(resizedLocation);
         system(originalCommand.c_str());
         system(resizedCommand.c_str());
 	}
+	
+	lastFrameResized.update();
+	
+	ofLog(OF_LOG_VERBOSE, "done saving and tagging");
 }
 
 void testApp::draw(){
 	ofBackground(0, 0, 0);
 	ofSetColor(255);
-	lastFrame.draw(0, 0);
+	lastFrameResized.draw(0, 0, ofGetWidth(), ofGetHeight());
 	
 #ifdef USE_NETBOOK
+    ofSetColor(0);
+    ofRect(5, 5, 400, 150);
+
     const GpsData& gpsData = gps.getData();
     stringstream gpsTime, gpsPosition;
     gpsTime << gpsData.hours << ":" << gpsData.minutes << ":" << gpsData.seconds;
     gpsPosition << gpsData.latDegrees << "° " << gpsData.latMinutes << "' " << gpsData.latReference << ", " <<
-        gpsData.lonDegrees << "° " << gpsData.lonMinutes << "' " << gpsData.lonReference;
+        gpsData.lonDegrees << "° " << gpsData.lonMinutes << "' " << gpsData.lonReference << " " <<
+        (int) gpsData.altitude << "m";
     string status;
     if(gpsData.ready()) {
         status = "has fix";
     } else {
         status = "no fix";
     }
-    ofDrawBitmapString("gps state: " + status, 10, 20);
-    ofDrawBitmapString("gps input: " + gps.getLatestMessage(), 10, 40);
-	ofDrawBitmapString("gps time: " + gpsTime.str(), 10, 60);
-	ofDrawBitmapString("gps position: " + gpsPosition.str(), 10, 80);
+    ofSetColor(255, 0, 0);
+    ofDrawBitmapString("GPS", 10, 20);
+    ofSetColor(255);
+    ofDrawBitmapString("status: " + status, 10, 40);
+    ofDrawBitmapString("latest message: " + gps.getLatestMessage(), 10, 60);
+	ofDrawBitmapString("time: " + gpsTime.str(), 10, 80);
+	ofDrawBitmapString("satellites: " + ofToString(gpsData.satellites), 10, 100);
+	ofDrawBitmapString("position: " + gpsPosition.str(), 10, 120);
+	if(gps.idleTime() > gpsTimeout) {
+        ofSetColor(255, 0, 0);
+        ofDrawBitmapString("restart GPS control (" + ofToString((int) gps.idleTime()) + "s)", 10, 140);
+	}
 #endif
 }
 

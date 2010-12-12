@@ -24,6 +24,9 @@ public:
 	
 	bool makeExivScript(string scriptFile);
 
+	bool useIds;
+	ofxIds ids;
+
 	ofVideoGrabber camera;
 	ofImage lastFrame, lastFrameResized;
 
@@ -44,8 +47,7 @@ public:
     float photoTimeout;
 	
 	GpsLog gps;
-	
-	ofxIds ids;
+	float gpsTimeout;
 	
 	void keyPressed(int key);
 	void keyReleased(int key);

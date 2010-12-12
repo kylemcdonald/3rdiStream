@@ -1,16 +1,18 @@
 <netbook>
 	<deviceId>1</deviceId>
-	<camWidth>640</camWidth>
-	<camHeight>480</camHeight>
-	<photoInterval>10</photoInterval>
-	<uploadInterval>240</uploadInterval>
-	<photoTimeout>8</photoTimeout>
+	<resize>4</resize>
+	<photoInterval>60</photoInterval>
+	<uploadInterval>60</uploadInterval>
+	<photoTimeout>15</photoTimeout>
+	<useIds>1</useIds>
+	<gpsTimeout>15</gpsTimeout>
 </netbook>
 <debug>
 	<deviceId>0</deviceId>
-	<camWidth>640</camWidth>
-	<camHeight>480</camHeight>
+	<resize>2</resize>
 	<photoInterval>5</photoInterval>
 	<uploadInterval>240</uploadInterval>
-	<photoTimeout>4/photoTimeout>	
+	<photoTimeout>4/photoTimeout>
+	<useIds>0</useIds>	
+	<gpsTimeout>10</gpsTimeout>
 </debug>

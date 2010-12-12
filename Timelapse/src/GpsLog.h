@@ -13,17 +13,13 @@ protected:
 	GpsData workingData, stableData;
 	string nmeaMessage;
 	
+	float lastInput;
+	
     void threadedFunction() {
         while(isThreadRunning()) {
             nmeaMessage = readLine();
             if(workingData.parseOutput(nmeaMessage)) {
                 stableData = workingData;
-                /*
-				cout << gpsData.hours << ":" << gpsData.minutes << ":" << gpsData.seconds << endl;
-				cout << "latitude: " << gpsData.latDegrees << " degrees " << gpsData.latMinutes << "' " << gpsData.latReference << endl;
-				cout << "longitude: " << gpsData.lonDegrees << " degrees " << gpsData.lonMinutes << "' " << gpsData.lonReference << endl;
-				cout << "altitude: " << gpsData.altitude << " m" << endl;
-				*/
             }
         }
     }
@@ -32,6 +28,7 @@ protected:
         char curChar = '\0';
         while(isThreadRunning() && curChar != '\n') {
             if(gpsSerialData.available()) {
+                lastInput = ofGetElapsedTimef();
                 gpsSerialData.readBytes((unsigned char*) &curChar, 1);
                 if(curChar == '\n') {
                     break;
@@ -54,11 +51,15 @@ public:
         } else {
             ofLog(OF_LOG_VERBOSE, "Connected to internal GPS stream.");
         }
+        lastInput = ofGetElapsedTimef();
     }
     const GpsData& getData() {
         return stableData;
     }
     const string& getLatestMessage() {
         return nmeaMessage;
+    }
+    float idleTime() const {
+        return ofGetElapsedTimef() - lastInput;
     }
 };
