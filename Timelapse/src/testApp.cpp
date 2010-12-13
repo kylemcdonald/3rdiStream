@@ -1,10 +1,10 @@
 #include "testApp.h"
 
-void testApp::setup(){
+void testApp::setup() {
 	ofDisableArbTex();
-	
+
 	ofSetLogLevel(OF_LOG_VERBOSE);
-	
+
 	ofxXmlSettings cameraSettings;
 	cameraSettings.loadFile("cameraSettings.xml");
 #ifdef USE_NETBOOK
@@ -21,13 +21,13 @@ void testApp::setup(){
 	gpsTimeout = cameraSettings.getValue("gpsTimeout", 1.);
 	rotateImage = cameraSettings.getValue("rotateImage", 0);
 	cameraSettings.popTag();
-	
-	
+
+
 	ofSetFrameRate(1000. / cameraFrameWait);
-	
+
 	photoTimer.setPeriod(photoInterval);
 	uploadTimer.setPeriod(uploadInterval);
-	
+
 	if(useIds) {
 		camWidth = 3264;
 		camHeight = 2448;
@@ -38,14 +38,14 @@ void testApp::setup(){
 	}
 	resizedWidth = camWidth / resize;
 	resizedHeight = camHeight / resize;
-	
+
 	ofLog(OF_LOG_VERBOSE, "original at " + ofToString(camWidth) + "x" + ofToString(camHeight));
 	ofLog(OF_LOG_VERBOSE, "resized to " + ofToString(resizedWidth) + "x" + ofToString(resizedHeight));
-	
+
 	lastFrame.setUseTexture(false);
-	
+
 	startCapture();
-	
+
 	/*
 	 ofxXmlSettings serverSettings;
 	 serverSettings.loadFile("serverSettings.xml");
@@ -54,28 +54,28 @@ void testApp::setup(){
 	 string password = serverSettings.getValue("password", "");
 	 ofLog(OF_LOG_VERBOSE, "Using FTP server " + username + "@" + address + " password: " + password);
 	 ftpUpdate.setup(address, username, password);
-	 
+
 	 ofxXmlSettings transferSettings;
 	 transferSettings.loadFile("transferSettings.xml");
 	 string localDirectory = transferSettings.getValue("localDirectory", "");
 	 string remoteDirectory = transferSettings.getValue("remoteDirectory", "");
 	 ftpUpdate.update(localDirectory, remoteDirectory);
 	 */
-	
+
 #ifdef USE_NETBOOK
 	gps.setup();
 	gps.startThread();
 #endif
 }
 
-void testApp::update(){
+void testApp::update() {
 	if(photoTimer.tick()) {
 		ofLog(OF_LOG_VERBOSE, "photoTimer ticked.");
 		startCapture();
 	}
-	
+
 	grabFrame();
-	
+
 	if(uploadTimer.tick()) {
 #ifdef USE_NETBOOK
 		ofLog(OF_LOG_VERBOSE, "uploadTimer ticked.");
@@ -106,7 +106,7 @@ void testApp::grabFrame() {
 	if(capturing) {
 		float waitingTime = ofGetElapsedTimef() - startWaiting;
 		ofLog(OF_LOG_VERBOSE, "Grabbing frame from camera: " + ofToString(waitingTime));
-		
+
 		if(useIds) {
 #ifdef USE_NETBOOK
 			ids.snapImage(lastFrame);
@@ -117,14 +117,14 @@ void testApp::grabFrame() {
 			stopCapture();
 		} else {
 			camera.grabFrame();
-			
+
 			if(camera.isFrameNew()) {
 				ofLog(OF_LOG_VERBOSE, "Copying frame to lastFrame.");
 				lastFrame.setFromPixels(camera.getPixels(), camWidth, camHeight, OF_IMAGE_COLOR);
 				saveLastFrame();
 				stopCapture();
 			}
-			
+
 			if(waitingTime > photoTimeout) {
 				ofLog(OF_LOG_VERBOSE, "Had to quit, camera is not responding.");
 				stopCapture();
@@ -147,25 +147,11 @@ void testApp::stopCapture() {
 string testApp::getDaystamp() {
 	Poco::Timestamp curTime;
 	return Poco::DateTimeFormatter::format(curTime, "%m-%d-%Y");
-	/*
-	 stringstream daystamp;
-	 daystamp << ofGetMonth() << "-";
-	 daystamp << ofGetDay() << "-";
-	 daystamp << ofGetYear();
-	 return daystamp.str();
-	 */
 }
 
 string testApp::getTimestamp() {
 	Poco::Timestamp curTime;
 	return Poco::DateTimeFormatter::format(curTime, "%H-%M-%S");
-	/*
-	 stringstream timestamp;
-	 timestamp << ofGetHours() << "-";
-	 timestamp << ofGetMinutes() << "-";
-	 timestamp << ofGetSeconds();
-	 return timestamp.str();
-	 */
 }
 
 bool testApp::makeExivScript(string scriptFile) {
@@ -203,29 +189,29 @@ void testApp::ensureDirectory(string path, bool relativeToData) {
 void testApp::saveLastFrame() {
 	string daystamp = getDaystamp();
 	string timestamp = getTimestamp();
-	
+
 	if(rotateImage) {
 		ofLog(OF_LOG_VERBOSE, "rotating image");
 		lastFrame.rotate(180);
 	} else {
 		ofLog(OF_LOG_VERBOSE, "not rotating image");
 	}
-	
+
 	ofLog(OF_LOG_VERBOSE, "saving images to " + daystamp + "/" + timestamp);
-	
+
 	string originalBase = "3rdiStream/original/" + daystamp;
 	ensureDirectory(originalBase);
 	string originalLocation = originalBase + "/" + timestamp + ".jpg";
 	lastFrame.saveImage(originalLocation);
-	
+
 	lastFrameResized.setFromPixels(lastFrame.getPixels(), lastFrame.getWidth(), lastFrame.getHeight(), OF_IMAGE_COLOR);
 	lastFrameResized.resize(resizedWidth, resizedHeight);
-	
+
 	string resizedBase = "3rdiStream/resized/" + daystamp;
 	ensureDirectory(resizedBase);
 	string resizedLocation = resizedBase + "/" + timestamp + ".jpg";
 	lastFrameResized.saveImage(resizedLocation);
-	
+
 	string scriptFile = "exiv2-gps.txt";
 	if(makeExivScript(scriptFile)) {
 		ofLog(OF_LOG_VERBOSE, "embedding GPS data");
@@ -234,21 +220,21 @@ void testApp::saveLastFrame() {
 		system(originalCommand.c_str());
 		system(resizedCommand.c_str());
 	}
-	
+
 	lastFrameResized.update();
-	
+
 	ofLog(OF_LOG_VERBOSE, "done saving and tagging");
 }
 
-void testApp::draw(){
+void testApp::draw() {
 	ofBackground(0, 0, 0);
 	ofSetColor(255);
 	lastFrameResized.draw(0, 0, ofGetWidth(), ofGetHeight());
-	
+
 #ifdef USE_NETBOOK
 	ofSetColor(0);
 	ofRect(5, 5, 400, 150);
-	
+
 	const GpsData& gpsData = gps.getData();
 	stringstream gpsTime, gpsPosition;
 	gpsTime << gpsData.hours << ":" << gpsData.minutes << ":" << gpsData.seconds;
@@ -276,24 +262,24 @@ void testApp::draw(){
 #endif
 }
 
-void testApp::keyPressed(int key){
+void testApp::keyPressed(int key) {
 }
 
-void testApp::keyReleased(int key){
+void testApp::keyReleased(int key) {
 }
 
-void testApp::mouseMoved(int x, int y ){
+void testApp::mouseMoved(int x, int y ) {
 }
 
-void testApp::mouseDragged(int x, int y, int button){
+void testApp::mouseDragged(int x, int y, int button) {
 }
 
-void testApp::mousePressed(int x, int y, int button){
+void testApp::mousePressed(int x, int y, int button) {
 }
 
-void testApp::mouseReleased(int x, int y, int button){
+void testApp::mouseReleased(int x, int y, int button) {
 }
 
-void testApp::windowResized(int w, int h){
+void testApp::windowResized(int w, int h) {
 }
 

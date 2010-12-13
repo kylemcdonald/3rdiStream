@@ -9,10 +9,10 @@
 #include "ofxImage.h"
 
 #ifdef USE_NETBOOK
-#include "ofxIds.h" 
+#include "ofxIds.h"
 #endif
 
-class testApp : public ofBaseApp{
+class testApp : public ofBaseApp {
 public:
 	void setup();
 	void update();
@@ -25,7 +25,7 @@ public:
 	string getDaystamp();
 	string getTimestamp();
 	void ensureDirectory(string path, bool relativeToData = true);
-	
+
 	bool makeExivScript(string scriptFile);
 
 	bool useIds;
@@ -43,7 +43,7 @@ public:
 
 	float photoInterval;
 	DelayTimer photoTimer;
-	
+
 	float uploadInterval;
 	DelayTimer uploadTimer;
 	float startWaiting;
@@ -53,10 +53,10 @@ public:
 	static const int cameraFrameWait = 100; // in milliseconds
 	float photoTimeout;
 	bool rotateImage;
-	
+
 	GpsLog gps;
 	float gpsTimeout;
-	
+
 	void keyPressed(int key);
 	void keyReleased(int key);
 	void mouseMoved(int x, int y );
