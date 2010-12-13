@@ -12,6 +12,8 @@
 		270E9A9612A22AD100CF9061 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 270E9A9012A22AD100CF9061 /* tinyxmlparser.cpp */; };
 		270E9A9712A22AD100CF9061 /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 270E9A9212A22AD100CF9061 /* ofxXmlSettings.cpp */; };
 		270E9B3F12A245C400CF9061 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 270E9B1012A245C400CF9061 /* libcurl.a */; };
+		27F19FA212B643E8008C451F /* ofxThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 27F19FA012B643E8008C451F /* ofxThread.cpp */; };
+		27F19FEF12B6452F008C451F /* ofxImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 27F19FED12B6452F008C451F /* ofxImage.cpp */; };
 		E45BE0AA0E8CC67C009D7055 /* GLee.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE0A90E8CC67C009D7055 /* GLee.a */; };
 		E45BE2E40E8CC69C009D7055 /* rtAudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE2E30E8CC69C009D7055 /* rtAudio.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
@@ -106,6 +108,12 @@
 		270E9B2212A245C400CF9061 /* typecheck-gcc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "typecheck-gcc.h"; path = "../../../addons/ofxCurl/src/include/curl/typecheck-gcc.h"; sourceTree = SOURCE_ROOT; };
 		270E9B2312A245C400CF9061 /* types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = types.h; path = ../../../addons/ofxCurl/src/include/curl/types.h; sourceTree = SOURCE_ROOT; };
 		270E9BBE12A2A5B300CF9061 /* ofxFileHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxFileHelper.h; path = ../../../addons/ofxFileHelper/src/ofxFileHelper/ofxFileHelper.h; sourceTree = SOURCE_ROOT; };
+		27F19F9D12B643E8008C451F /* Instructions.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Instructions.txt; sourceTree = "<group>"; };
+		27F19F9E12B643E8008C451F /* install.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = install.xml; sourceTree = "<group>"; };
+		27F19FA012B643E8008C451F /* ofxThread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxThread.cpp; sourceTree = "<group>"; };
+		27F19FA112B643E8008C451F /* ofxThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxThread.h; sourceTree = "<group>"; };
+		27F19FED12B6452F008C451F /* ofxImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxImage.cpp; sourceTree = "<group>"; };
+		27F19FEE12B6452F008C451F /* ofxImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxImage.h; sourceTree = "<group>"; };
 		E45BE0390E8CC647009D7055 /* FreeImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FreeImage.h; path = ../../../libs/freeimage/include/FreeImage.h; sourceTree = SOURCE_ROOT; };
 		E45BE03F0E8CC650009D7055 /* fmod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fmod.h; path = ../../../libs/fmodex/include/fmod.h; sourceTree = SOURCE_ROOT; };
 		E45BE0400E8CC650009D7055 /* fmod.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = fmod.hpp; path = ../../../libs/fmodex/include/fmod.hpp; sourceTree = SOURCE_ROOT; };
@@ -218,6 +226,8 @@
 		270E9A9812A22ADB00CF9061 /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				27F19FEB12B6452F008C451F /* ofxImage */,
+				27F19F9B12B643E8008C451F /* ofxThread */,
 				270E9BBD12A2A5B300CF9061 /* ofxFileHelper */,
 				270E9AD912A245C400CF9061 /* ofxCurl */,
 				270E9A8A12A22AD100CF9061 /* ofxXmlSettings */,
@@ -298,6 +308,52 @@
 			name = ofxFileHelper;
 			path = ../../../addons/ofxFileHelper/src/ofxFileHelper;
 			sourceTree = SOURCE_ROOT;
+		};
+		27F19F9B12B643E8008C451F /* ofxThread */ = {
+			isa = PBXGroup;
+			children = (
+				27F19F9C12B643E8008C451F /* docs */,
+				27F19F9E12B643E8008C451F /* install.xml */,
+				27F19F9F12B643E8008C451F /* src */,
+			);
+			name = ofxThread;
+			path = ../../../addons/ofxThread;
+			sourceTree = SOURCE_ROOT;
+		};
+		27F19F9C12B643E8008C451F /* docs */ = {
+			isa = PBXGroup;
+			children = (
+				27F19F9D12B643E8008C451F /* Instructions.txt */,
+			);
+			path = docs;
+			sourceTree = "<group>";
+		};
+		27F19F9F12B643E8008C451F /* src */ = {
+			isa = PBXGroup;
+			children = (
+				27F19FA012B643E8008C451F /* ofxThread.cpp */,
+				27F19FA112B643E8008C451F /* ofxThread.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		27F19FEB12B6452F008C451F /* ofxImage */ = {
+			isa = PBXGroup;
+			children = (
+				27F19FEC12B6452F008C451F /* src */,
+			);
+			name = ofxImage;
+			path = ../addons/ofxImage;
+			sourceTree = SOURCE_ROOT;
+		};
+		27F19FEC12B6452F008C451F /* src */ = {
+			isa = PBXGroup;
+			children = (
+				27F19FED12B6452F008C451F /* ofxImage.cpp */,
+				27F19FEE12B6452F008C451F /* ofxImage.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
 		};
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
@@ -675,6 +731,8 @@
 				270E9A9512A22AD100CF9061 /* tinyxmlerror.cpp in Sources */,
 				270E9A9612A22AD100CF9061 /* tinyxmlparser.cpp in Sources */,
 				270E9A9712A22AD100CF9061 /* ofxXmlSettings.cpp in Sources */,
+				27F19FA212B643E8008C451F /* ofxThread.cpp in Sources */,
+				27F19FEF12B6452F008C451F /* ofxImage.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

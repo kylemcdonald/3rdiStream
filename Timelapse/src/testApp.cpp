@@ -1,8 +1,8 @@
 #include "testApp.h"
 
 void testApp::setup(){
-    ofDisableArbTex();
-    
+	ofDisableArbTex();
+	
 	ofSetLogLevel(OF_LOG_VERBOSE);
 	
 	ofxXmlSettings cameraSettings;
@@ -12,14 +12,16 @@ void testApp::setup(){
 #else
 	cameraSettings.pushTag("debug");
 #endif
-    deviceId = cameraSettings.getValue("deviceId", 0);
+	deviceId = cameraSettings.getValue("deviceId", 0);
 	float resize = cameraSettings.getValue("resize", 0.);
 	photoInterval = cameraSettings.getValue("photoInterval", 0.);
 	photoTimeout = cameraSettings.getValue("photoTimeout", 0.);
 	uploadInterval = cameraSettings.getValue("uploadInterval", 0.);
 	useIds = cameraSettings.getValue("useIds", 0);
 	gpsTimeout = cameraSettings.getValue("gpsTimeout", 1.);
+	rotateImage = cameraSettings.getValue("rotateImage", 0);
 	cameraSettings.popTag();
+	
 	
 	ofSetFrameRate(1000. / cameraFrameWait);
 	
@@ -27,41 +29,42 @@ void testApp::setup(){
 	uploadTimer.setPeriod(uploadInterval);
 	
 	if(useIds) {
-	    camWidth = 3264;
-	    camHeight = 2448;
+		camWidth = 3264;
+		camHeight = 2448;
 	} else {
-        camera.listDevices();
-        camWidth = 640;
-        camHeight = 480;
+		camera.listDevices();
+		camWidth = 640;
+		camHeight = 480;
 	}
 	resizedWidth = camWidth / resize;
 	resizedHeight = camHeight / resize;
 	
+	ofLog(OF_LOG_VERBOSE, "original at " + ofToString(camWidth) + "x" + ofToString(camHeight));
 	ofLog(OF_LOG_VERBOSE, "resized to " + ofToString(resizedWidth) + "x" + ofToString(resizedHeight));
 	
 	lastFrame.setUseTexture(false);
 	
 	startCapture();
-
-    /*
-    ofxXmlSettings serverSettings;
-    serverSettings.loadFile("serverSettings.xml");
-    string address = serverSettings.getValue("address", "");
-    string username = serverSettings.getValue("username", "");
-    string password = serverSettings.getValue("password", "");
-    ofLog(OF_LOG_VERBOSE, "Using FTP server " + username + "@" + address + " password: " + password);
-    ftpUpdate.setup(address, username, password);
-
-    ofxXmlSettings transferSettings;
-    transferSettings.loadFile("transferSettings.xml");
-    string localDirectory = transferSettings.getValue("localDirectory", "");
-    string remoteDirectory = transferSettings.getValue("remoteDirectory", "");
-    ftpUpdate.update(localDirectory, remoteDirectory);
-    */
-
+	
+	/*
+	 ofxXmlSettings serverSettings;
+	 serverSettings.loadFile("serverSettings.xml");
+	 string address = serverSettings.getValue("address", "");
+	 string username = serverSettings.getValue("username", "");
+	 string password = serverSettings.getValue("password", "");
+	 ofLog(OF_LOG_VERBOSE, "Using FTP server " + username + "@" + address + " password: " + password);
+	 ftpUpdate.setup(address, username, password);
+	 
+	 ofxXmlSettings transferSettings;
+	 transferSettings.loadFile("transferSettings.xml");
+	 string localDirectory = transferSettings.getValue("localDirectory", "");
+	 string remoteDirectory = transferSettings.getValue("remoteDirectory", "");
+	 ftpUpdate.update(localDirectory, remoteDirectory);
+	 */
+	
 #ifdef USE_NETBOOK
-    gps.setup();
-    gps.startThread();
+	gps.setup();
+	gps.startThread();
 #endif
 }
 
@@ -75,110 +78,116 @@ void testApp::update(){
 	
 	if(uploadTimer.tick()) {
 #ifdef USE_NETBOOK
-        ofLog(OF_LOG_VERBOSE, "uploadTimer ticked.");
+		ofLog(OF_LOG_VERBOSE, "uploadTimer ticked.");
 		system("cd data & ftpsync-resized.bat & cd ..");
 #endif
 	}
 }
 
 void testApp::startCapture() {
-    if(!capturing) {
-        bool success = false;
-        if(useIds) {
-            success = ids.OpenCamera();
-	    } else {
-	        camera.setDeviceID(deviceId);
-	        success = camera.initGrabber(camWidth, camHeight);
-	    }
-	    if(success) {
-            startWaiting = ofGetElapsedTimef();
-            capturing = true;
-        }
-    }
+	if(!capturing) {
+		bool success = false;
+		if(useIds) {
+#ifdef USE_NETBOOK
+			success = ids.OpenCamera();
+#endif
+		} else {
+			camera.setDeviceID(deviceId);
+			success = camera.initGrabber(camWidth, camHeight);
+		}
+		if(success) {
+			startWaiting = ofGetElapsedTimef();
+			capturing = true;
+		}
+	}
 }
 
 void testApp::grabFrame() {
-    if(capturing) {
-        float waitingTime = ofGetElapsedTimef() - startWaiting;
-        ofLog(OF_LOG_VERBOSE, "Grabbing frame from camera: " + ofToString(waitingTime));
-        
-        if(useIds) {
-            ids.snapImage(lastFrame);
-            waitingTime = ofGetElapsedTimef() - startWaiting;
-            ofLog(OF_LOG_VERBOSE, "Grabbed from via IDS API." + ofToString(waitingTime));
-            saveLastFrame();
-            stopCapture();
-        } else {
-            camera.grabFrame();
-            
-            if(camera.isFrameNew()) {
-                ofLog(OF_LOG_VERBOSE, "Copying frame to lastFrame.");
-                lastFrame.setFromPixels(camera.getPixels(), camWidth, camHeight, OF_IMAGE_COLOR);
-                saveLastFrame();
-                stopCapture();
-            }
-            
-            if(waitingTime > photoTimeout) {
-                ofLog(OF_LOG_VERBOSE, "Had to quit, camera is not responding.");
-                stopCapture();
-            }
-        }
-    }
+	if(capturing) {
+		float waitingTime = ofGetElapsedTimef() - startWaiting;
+		ofLog(OF_LOG_VERBOSE, "Grabbing frame from camera: " + ofToString(waitingTime));
+		
+		if(useIds) {
+#ifdef USE_NETBOOK
+			ids.snapImage(lastFrame);
+#endif
+			waitingTime = ofGetElapsedTimef() - startWaiting;
+			ofLog(OF_LOG_VERBOSE, "Grabbed from via IDS API." + ofToString(waitingTime));
+			saveLastFrame();
+			stopCapture();
+		} else {
+			camera.grabFrame();
+			
+			if(camera.isFrameNew()) {
+				ofLog(OF_LOG_VERBOSE, "Copying frame to lastFrame.");
+				lastFrame.setFromPixels(camera.getPixels(), camWidth, camHeight, OF_IMAGE_COLOR);
+				saveLastFrame();
+				stopCapture();
+			}
+			
+			if(waitingTime > photoTimeout) {
+				ofLog(OF_LOG_VERBOSE, "Had to quit, camera is not responding.");
+				stopCapture();
+			}
+		}
+	}
 }
 
 void testApp::stopCapture() {
-    if(useIds) {
-        ids.CloseCamera();
-    } else {
-        camera.close();
-    }
-    capturing = false;
+	if(useIds) {
+#ifdef USE_NETBOOK
+		ids.CloseCamera();
+#endif
+	} else {
+		camera.close();
+	}
+	capturing = false;
 }
 
 string testApp::getDaystamp() {
-    Poco::Timestamp curTime;
-    return Poco::DateTimeFormatter::format(curTime, "%m-%d-%Y");
-    /*
-	stringstream daystamp;
-	daystamp << ofGetMonth() << "-";
-	daystamp << ofGetDay() << "-";
-	daystamp << ofGetYear();
-	return daystamp.str();
-	*/
+	Poco::Timestamp curTime;
+	return Poco::DateTimeFormatter::format(curTime, "%m-%d-%Y");
+	/*
+	 stringstream daystamp;
+	 daystamp << ofGetMonth() << "-";
+	 daystamp << ofGetDay() << "-";
+	 daystamp << ofGetYear();
+	 return daystamp.str();
+	 */
 }
 
 string testApp::getTimestamp() {
-    Poco::Timestamp curTime;
-    return Poco::DateTimeFormatter::format(curTime, "%H-%M-%S");
-    /*
-	stringstream timestamp;
-	timestamp << ofGetHours() << "-";
-	timestamp << ofGetMinutes() << "-";
-	timestamp << ofGetSeconds();
-	return timestamp.str();
-	*/
+	Poco::Timestamp curTime;
+	return Poco::DateTimeFormatter::format(curTime, "%H-%M-%S");
+	/*
+	 stringstream timestamp;
+	 timestamp << ofGetHours() << "-";
+	 timestamp << ofGetMinutes() << "-";
+	 timestamp << ofGetSeconds();
+	 return timestamp.str();
+	 */
 }
 
 bool testApp::makeExivScript(string scriptFile) {
-    GpsData gpsData = gps.getData();
-    if(!gpsData.ready()) {
-        return false;
-    }
-    fstream out;
-    out.open(scriptFile.c_str(), ios_base::out | ios_base::trunc);
-    out << "set Exif.GPSInfo.GPSVersionID Byte 0 0 2 2" << endl;
-    out << "set Exif.GPSInfo.GPSLatitudeRef Ascii " << gpsData.latReference << endl;
-    out << "set Exif.GPSInfo.GPSLatitude Rational " << gpsData.latDegrees << "/1 " <<
-        (int) gpsData.latMinutes << "/1 " <<
-        (int) (fmodf(gpsData.latMinutes, 1) * 60) << "/1" << endl;
-    out << "set Exif.GPSInfo.GPSLongitudeRef Ascii " << gpsData.lonReference << endl;
-    out << "set Exif.GPSInfo.GPSLongitude Rational " << gpsData.lonDegrees << "/1 " <<
-        (int) gpsData.lonMinutes << "/1 " <<
-        (int) (fmodf(gpsData.lonMinutes, 1) * 60) << "/1" << endl;
-    out << "set Exif.GPSInfo.GPSAltitudeRef Byte " << (gpsData.altitude > 0 ? "0" : "1") << endl;
-    out << "set Exif.GPSInfo.GPSAltitude Rational " << (int) (gpsData.altitude) << "/1" << endl;
-    out.close();
-    return true;
+	GpsData gpsData = gps.getData();
+	if(!gpsData.ready()) {
+		return false;
+	}
+	fstream out;
+	out.open(scriptFile.c_str(), ios_base::out | ios_base::trunc);
+	out << "set Exif.GPSInfo.GPSVersionID Byte 0 0 2 2" << endl;
+	out << "set Exif.GPSInfo.GPSLatitudeRef Ascii " << gpsData.latReference << endl;
+	out << "set Exif.GPSInfo.GPSLatitude Rational " << gpsData.latDegrees << "/1 " <<
+	(int) gpsData.latMinutes << "/1 " <<
+	(int) (fmodf(gpsData.latMinutes, 1) * 60) << "/1" << endl;
+	out << "set Exif.GPSInfo.GPSLongitudeRef Ascii " << gpsData.lonReference << endl;
+	out << "set Exif.GPSInfo.GPSLongitude Rational " << gpsData.lonDegrees << "/1 " <<
+	(int) gpsData.lonMinutes << "/1 " <<
+	(int) (fmodf(gpsData.lonMinutes, 1) * 60) << "/1" << endl;
+	out << "set Exif.GPSInfo.GPSAltitudeRef Byte " << (gpsData.altitude > 0 ? "0" : "1") << endl;
+	out << "set Exif.GPSInfo.GPSAltitude Rational " << (int) (gpsData.altitude) << "/1" << endl;
+	out.close();
+	return true;
 }
 
 void testApp::ensureDirectory(string path, bool relativeToData) {
@@ -194,6 +203,13 @@ void testApp::ensureDirectory(string path, bool relativeToData) {
 void testApp::saveLastFrame() {
 	string daystamp = getDaystamp();
 	string timestamp = getTimestamp();
+	
+	if(rotateImage) {
+		ofLog(OF_LOG_VERBOSE, "rotating image");
+		lastFrame.rotate(180);
+	} else {
+		ofLog(OF_LOG_VERBOSE, "not rotating image");
+	}
 	
 	ofLog(OF_LOG_VERBOSE, "saving images to " + daystamp + "/" + timestamp);
 	
@@ -212,11 +228,11 @@ void testApp::saveLastFrame() {
 	
 	string scriptFile = "exiv2-gps.txt";
 	if(makeExivScript(scriptFile)) {
-	    ofLog(OF_LOG_VERBOSE, "embedding GPS data");
-	    string originalCommand = "exiv2 -m " + scriptFile + " " + ofToDataPath(originalLocation);
-	    string resizedCommand = "exiv2 -m " + scriptFile + " " + ofToDataPath(resizedLocation);
-        system(originalCommand.c_str());
-        system(resizedCommand.c_str());
+		ofLog(OF_LOG_VERBOSE, "embedding GPS data");
+		string originalCommand = "exiv2 -m " + scriptFile + " " + ofToDataPath(originalLocation);
+		string resizedCommand = "exiv2 -m " + scriptFile + " " + ofToDataPath(resizedLocation);
+		system(originalCommand.c_str());
+		system(resizedCommand.c_str());
 	}
 	
 	lastFrameResized.update();
@@ -230,32 +246,32 @@ void testApp::draw(){
 	lastFrameResized.draw(0, 0, ofGetWidth(), ofGetHeight());
 	
 #ifdef USE_NETBOOK
-    ofSetColor(0);
-    ofRect(5, 5, 400, 150);
-
-    const GpsData& gpsData = gps.getData();
-    stringstream gpsTime, gpsPosition;
-    gpsTime << gpsData.hours << ":" << gpsData.minutes << ":" << gpsData.seconds;
-    gpsPosition << gpsData.latDegrees << "° " << gpsData.latMinutes << "' " << gpsData.latReference << ", " <<
-        gpsData.lonDegrees << "° " << gpsData.lonMinutes << "' " << gpsData.lonReference << " " <<
-        (int) gpsData.altitude << "m";
-    string status;
-    if(gpsData.ready()) {
-        status = "has fix";
-    } else {
-        status = "no fix";
-    }
-    ofSetColor(255, 0, 0);
-    ofDrawBitmapString("GPS", 10, 20);
-    ofSetColor(255);
-    ofDrawBitmapString("status: " + status, 10, 40);
-    ofDrawBitmapString("latest message: " + gps.getLatestMessage(), 10, 60);
+	ofSetColor(0);
+	ofRect(5, 5, 400, 150);
+	
+	const GpsData& gpsData = gps.getData();
+	stringstream gpsTime, gpsPosition;
+	gpsTime << gpsData.hours << ":" << gpsData.minutes << ":" << gpsData.seconds;
+	gpsPosition << gpsData.latDegrees << "° " << gpsData.latMinutes << "' " << gpsData.latReference << ", " <<
+	gpsData.lonDegrees << "° " << gpsData.lonMinutes << "' " << gpsData.lonReference << " " <<
+	(int) gpsData.altitude << "m";
+	string status;
+	if(gpsData.ready()) {
+		status = "has fix";
+	} else {
+		status = "no fix";
+	}
+	ofSetColor(255, 0, 0);
+	ofDrawBitmapString("GPS", 10, 20);
+	ofSetColor(255);
+	ofDrawBitmapString("status: " + status, 10, 40);
+	ofDrawBitmapString("latest message: " + gps.getLatestMessage(), 10, 60);
 	ofDrawBitmapString("time: " + gpsTime.str(), 10, 80);
 	ofDrawBitmapString("satellites: " + ofToString(gpsData.satellites), 10, 100);
 	ofDrawBitmapString("position: " + gpsPosition.str(), 10, 120);
 	if(gps.idleTime() > gpsTimeout) {
-        ofSetColor(255, 0, 0);
-        ofDrawBitmapString("restart GPS control (" + ofToString((int) gps.idleTime()) + "s)", 10, 140);
+		ofSetColor(255, 0, 0);
+		ofDrawBitmapString("restart GPS control (" + ofToString((int) gps.idleTime()) + "s)", 10, 140);
 	}
 #endif
 }

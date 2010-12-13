@@ -6,7 +6,11 @@
 #include "ofxXmlSettings.h"
 #include "ofxFileHelper.h"
 #include "Poco/DateTimeFormatter.h"
+#include "ofxImage.h"
+
+#ifdef USE_NETBOOK
 #include "ofxIds.h" 
+#endif
 
 class testApp : public ofBaseApp{
 public:
@@ -25,16 +29,19 @@ public:
 	bool makeExivScript(string scriptFile);
 
 	bool useIds;
+#ifdef USE_NETBOOK
 	ofxIds ids;
+#endif
 
 	ofVideoGrabber camera;
-	ofImage lastFrame, lastFrameResized;
+	ofxImage lastFrame;
+	ofImage lastFrameResized;
 
-    int deviceId;
+	int deviceId;
 	int camWidth, camHeight;
 	int resizedWidth, resizedHeight;
 
-    float photoInterval;
+	float photoInterval;
 	DelayTimer photoTimer;
 	
 	float uploadInterval;
@@ -44,7 +51,8 @@ public:
 
 	// This is how long the app waits between successive attempts at getting a new frame.
 	static const int cameraFrameWait = 100; // in milliseconds
-    float photoTimeout;
+	float photoTimeout;
+	bool rotateImage;
 	
 	GpsLog gps;
 	float gpsTimeout;
