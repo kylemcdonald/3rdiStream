@@ -20,8 +20,7 @@ void testApp::setup(){
 	useIds = cameraSettings.getValue("useIds", 0);
 	gpsTimeout = cameraSettings.getValue("gpsTimeout", 1.);
 	rotateImage = cameraSettings.getValue("rotateImage", 0);
-	cameraSettings.popTag();
-	
+	cameraSettings.popTag();	
 	
 	ofSetFrameRate(1000. / cameraFrameWait);
 	
@@ -271,7 +270,8 @@ void testApp::draw(){
 	ofDrawBitmapString("position: " + gpsPosition.str(), 10, 120);
 	if(gps.idleTime() > gpsTimeout) {
 		ofSetColor(255, 0, 0);
-		ofDrawBitmapString("restart GPS control (" + ofToString((int) gps.idleTime()) + "s)", 10, 140);
+		ofDrawBitmapString("restarting GPS control (" + ofToString((int) gps.idleTime()) + "s)", 10, 140);
+		gps.startStream();
 	}
 #endif
 }
