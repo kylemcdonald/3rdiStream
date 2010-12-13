@@ -21,10 +21,10 @@ protected:
 	bool useBuffer;
 public:
 	DelayTimer() :
-	period(0),
-	lastTime(0),
-	ticks(0),
-	useBuffer(false) {
+		period(0),
+		lastTime(0),
+		ticks(0),
+		useBuffer(false) {
 	};
 	void setFramerate(float framerate) {
 		period = 1 / framerate;

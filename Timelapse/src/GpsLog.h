@@ -12,7 +12,7 @@ protected:
 	
 	GpsData workingData, stableData;
 	string nmeaMessage;
-	
+
 	float lastInput;
 	
 	void threadedFunction() {
@@ -55,8 +55,7 @@ public:
 				ofLog(OF_LOG_FATAL_ERROR, "Cannot connect to the GPS data stream.");
 			} else {
 				ofLog(OF_LOG_VERBOSE, "Connected to internal GPS stream.");
-			}
-		}
+			}		}
 		lastInput = ofGetElapsedTimef();
 	}
 	const GpsData& getData() {

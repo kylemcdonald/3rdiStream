@@ -67,6 +67,7 @@
 			<Add directory="..\..\..\addons\ofxThread\src" />
 			<Add directory="..\addons\ofxIds\include" />
 			<Add directory="..\addons\ofxIds\src" />
+			<Add directory="..\addons\ofxImage\src" />
 		</Compiler>
 		<Linker>
 			<Add option="../../../libs/FreeImage/lib/win_cb/FreeImage.lib" />
@@ -138,6 +139,8 @@
 		<Unit filename="..\addons\ofxIds\include\uEye_tools.h" />
 		<Unit filename="..\addons\ofxIds\src\ofxIds.cpp" />
 		<Unit filename="..\addons\ofxIds\src\ofxIds.h" />
+		<Unit filename="..\addons\ofxImage\src\ofxImage.cpp" />
+		<Unit filename="..\addons\ofxImage\src\ofxImage.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />
