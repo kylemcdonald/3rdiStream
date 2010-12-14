@@ -11,8 +11,8 @@
 <debug>
 	<deviceId>2</deviceId>
 	<resize>2</resize>
-	<photoInterval>5</photoInterval>
-	<uploadInterval>240</uploadInterval>
+	<photoInterval>10</photoInterval>
+	<uploadInterval>10</uploadInterval>
 	<photoTimeout>4</photoTimeout>
 	<useIds>0</useIds>
 	<gpsTimeout>10</gpsTimeout>

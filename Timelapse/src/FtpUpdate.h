@@ -3,10 +3,10 @@
 #include "curl.h"
 
 class FtpUpdate {
-protected:
+public:
 	string address, username, password;
 	string localDirectory, remoteDirectory;
-public:
+	
 	void setup(string address, string username, string password) {
 		this->address = address;
 		this->username = username;
