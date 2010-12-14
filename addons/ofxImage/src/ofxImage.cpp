@@ -150,9 +150,11 @@ void ofxImage::mirror(bool horizontal, bool vertical){
 void ofxImage::rotate(float angle){
 	rotatePixels(myPixels, angle);
 	
-	tex.clear();
-	if (bUseTexture == true){
-		tex.allocate(myPixels.width, myPixels.height, myPixels.glDataType);
+	if(angle != 180) {
+		tex.clear();
+		if (bUseTexture == true){
+			tex.allocate(myPixels.width, myPixels.height, myPixels.glDataType);
+		}
 	}
 	
 	update();
