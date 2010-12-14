@@ -20,6 +20,12 @@ void testApp::setup() {
 	useIds = cameraSettings.getValue("useIds", 0);
 	gpsTimeout = cameraSettings.getValue("gpsTimeout", 1.);
 	rotateImage = cameraSettings.getValue("rotateImage", 0);
+	
+	string apn;
+	bool useAgps = cameraSettings.tagExists("apn");
+    if(useAgps) {
+        apn = cameraSettings.getValue("apn", "");
+	}
 	cameraSettings.popTag();
 
 	ofSetFrameRate(1000. / cameraFrameWait);
@@ -62,7 +68,7 @@ void testApp::setup() {
 	 */
 
 #ifdef USE_NETBOOK
-	gps.setup();
+	gps.setup(useAgps, apn);
 	gps.startThread();
 #endif
 }
@@ -237,7 +243,7 @@ void testApp::draw() {
 	const GpsData& gpsData = gps.getData();
 	stringstream gpsTime, gpsPosition;
 	gpsTime << gpsData.hours << ":" << gpsData.minutes << ":" << gpsData.seconds;
-	gpsPosition << gpsData.latDegrees << "° " << gpsData.latMinutes << "' " << gpsData.latReference << ", " <<
+	gpsPosition << gpsData.latDegrees << "* " << gpsData.latMinutes << "' " << gpsData.latReference << ", " <<
 	gpsData.lonDegrees << "° " << gpsData.lonMinutes << "' " << gpsData.lonReference << " " <<
 	(int) gpsData.altitude << "m";
 	string status;

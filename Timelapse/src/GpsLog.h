@@ -10,6 +10,9 @@ class GpsLog : public ofxThread {
 protected:
 	ofSerial gpsSerialData, gpsSerialControl;
 	
+	bool useAgps;
+	string apn;
+	
 	GpsData workingData, stableData;
 	string nmeaMessage;
 
@@ -36,26 +39,43 @@ protected:
 					available += curChar;
 				}
 			} else {
+			    while(gpsSerialControl.available()) {
+                    gpsSerialControl.readByte();
+			    }
 				ofSleepMillis(SERIAL_READLINE_SLEEP);
 			}
 		}
 		return available;
+	}
+	void sendControl(string cmd) {
+	    cmd += "\r\n";
+		unsigned char* cmduc = new unsigned char[cmd.size()];
+		memcpy(cmduc, cmd.c_str(), cmd.size());
+		gpsSerialControl.flush();
+		gpsSerialControl.writeBytes(cmduc, cmd.size());
+		delete [] cmduc;
 	}
 public:	
 	~GpsLog() {
 		gpsSerialData.close();
 		gpsSerialControl.close();
 	}
-	void setup() {
-		if(!gpsSerialControl.setup(4, 9600)) {
+	void setup(bool useAgps, string apn) {
+	    this->useAgps = useAgps;
+	    this->apn = apn;
+	    
+	    gpsSerialControl.enumerateDevices();
+		if(!gpsSerialControl.setup("COM5", 9600)) {
 			ofLog(OF_LOG_FATAL_ERROR, "Cannot connect to the GPS control.");
 		} else {
+			ofLog(OF_LOG_VERBOSE, "Connected to the GPS control.");
 			startStream();
-			if(!gpsSerialData.setup(5, 9600)) {
-				ofLog(OF_LOG_FATAL_ERROR, "Cannot connect to the GPS data stream.");
-			} else {
-				ofLog(OF_LOG_VERBOSE, "Connected to internal GPS stream.");
-			}		}
+		}
+        if(!gpsSerialData.setup("COM4", 9600)) {
+            ofLog(OF_LOG_FATAL_ERROR, "Cannot connect to the GPS data stream.");
+        } else {
+            ofLog(OF_LOG_VERBOSE, "Connected to internal GPS stream.");
+        }
 		lastInput = ofGetElapsedTimef();
 	}
 	const GpsData& getData() {
@@ -68,10 +88,11 @@ public:
 		return ofGetElapsedTimef() - lastInput;
 	}
 	void startStream() {
-		string cmdstr = "AT_OGPS=1"; // something like this
-		unsigned char* cmduc = new unsigned char[cmdstr.size()];
-		memcpy(cmduc, cmdstr.c_str(), cmdstr.size());
-		gpsSerialControl.writeBytes(cmduc, cmdstr.size());
-		delete [] cmduc;
+	    if(useAgps) {
+            sendControl("AT_OGPSP = 7,2");
+            sendControl("AT_OGPSCONT = 1, IP, " + apn);
+            sendControl("AT_OGPSLS = 1, http://supl.nokia.com");
+	    }
+	    sendControl("AT_OGPS = 2");
 	}
 };
