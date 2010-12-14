@@ -51,22 +51,22 @@ void testApp::setup() {
 
 	startCapture();
 
+	ofxXmlSettings serverSettings;
+	serverSettings.loadFile("serverSettings.xml");
+	address = serverSettings.getValue("address", "");
+	username = serverSettings.getValue("username", "");
+	password = serverSettings.getValue("password", "");
+	ofLog(OF_LOG_VERBOSE, "Using FTP server " + username + "@" + address + " password: " + password);
+	//ftpUpdate.setup(address, username, password);
+
 	/*
-	 ofxXmlSettings serverSettings;
-	 serverSettings.loadFile("serverSettings.xml");
-	 string address = serverSettings.getValue("address", "");
-	 string username = serverSettings.getValue("username", "");
-	 string password = serverSettings.getValue("password", "");
-	 ofLog(OF_LOG_VERBOSE, "Using FTP server " + username + "@" + address + " password: " + password);
-	 ftpUpdate.setup(address, username, password);
-
-	 ofxXmlSettings transferSettings;
-	 transferSettings.loadFile("transferSettings.xml");
-	 string localDirectory = transferSettings.getValue("localDirectory", "");
-	 string remoteDirectory = transferSettings.getValue("remoteDirectory", "");
-	 ftpUpdate.update(localDirectory, remoteDirectory);
+	ofxXmlSettings transferSettings;
+	transferSettings.loadFile("transferSettings.xml");
+	string localDirectory = transferSettings.getValue("localDirectory", "");
+	string remoteDirectory = transferSettings.getValue("remoteDirectory", "");
+	ftpUpdate.update(localDirectory, remoteDirectory);
 	 */
-
+	
 #ifdef USE_NETBOOK
 	gps.setup(useAgps, apn);
 	gps.startThread();
@@ -82,10 +82,24 @@ void testApp::update() {
 	grabFrame();
 
 	if(uploadTimer.tick()) {
-#ifdef USE_NETBOOK
 		ofLog(OF_LOG_VERBOSE, "uploadTimer ticked.");
-		system("cd data & ftpsync-resized.bat & cd ..");
-#endif
+		startUpload();
+	}
+}
+
+void testApp::startUpload() {
+	// system("cd data & ftpsync-resized.bat & cd ..");
+	if(daystamp != "") {
+		string basePath = RESIZED_DIR + daystamp + "/" + timestamp + ".jpg";
+		string localPath = ofToDataPath(basePath);
+		// curl --ftp-create-dirs -T data/3rdiStream/timestamp.jpg -u user:pass server/3rdiStream/resized/daystamp
+		string curlCommand = "curl --ftp-create-dirs -T " + localPath + " -u " + username + ":" + password + " ftp://" + address + "/" + basePath; 
+		if(system(curlCommand.c_str()) != 0) {
+			ofLog(OF_LOG_VERBOSE, "failed to upload: " + curlCommand);
+			// make a note here that things weren't uploaded. maybe a hidden file.
+		} else {
+			ofLog(OF_LOG_VERBOSE, "successful upload: " + curlCommand);
+		}
 	}
 }
 
@@ -192,8 +206,8 @@ void testApp::ensureDirectory(string path, bool relativeToData) {
 }
 
 void testApp::saveLastFrame() {
-	string daystamp = getDaystamp();
-	string timestamp = getTimestamp();
+	daystamp = getDaystamp();
+	timestamp = getTimestamp();
 
 	if(rotateImage) {
 		ofLog(OF_LOG_VERBOSE, "rotating image");
@@ -204,7 +218,7 @@ void testApp::saveLastFrame() {
 
 	ofLog(OF_LOG_VERBOSE, "saving images to " + daystamp + "/" + timestamp);
 
-	string originalBase = "3rdiStream/original/" + daystamp;
+	string originalBase = ORIGINAL_DIR + daystamp;
 	ensureDirectory(originalBase);
 	string originalLocation = originalBase + "/" + timestamp + ".jpg";
 	lastFrame.saveImage(originalLocation);
@@ -212,7 +226,7 @@ void testApp::saveLastFrame() {
 	lastFrameResized.setFromPixels(lastFrame.getPixels(), lastFrame.getWidth(), lastFrame.getHeight(), OF_IMAGE_COLOR);
 	lastFrameResized.resize(resizedWidth, resizedHeight);
 
-	string resizedBase = "3rdiStream/resized/" + daystamp;
+	string resizedBase = RESIZED_DIR + daystamp;
 	ensureDirectory(resizedBase);
 	string resizedLocation = resizedBase + "/" + timestamp + ".jpg";
 	lastFrameResized.saveImage(resizedLocation);

@@ -12,16 +12,23 @@
 #include "ofxIds.h"
 #endif
 
+#define RESIZED_DIR "3rdiStream/resized/"
+#define ORIGINAL_DIR "3rdiStream/original/"
+
 class testApp : public ofBaseApp {
 public:
 	void setup();
 	void update();
 	void draw();
 
+	void startUpload();
+	
 	void startCapture();
 	void stopCapture();
 	void grabFrame();
 	void saveLastFrame();
+	
+	string daystamp, timestamp;
 	string getDaystamp();
 	string getTimestamp();
 	void ensureDirectory(string path, bool relativeToData = true);
@@ -57,6 +64,8 @@ public:
 	GpsLog gps;
 	float gpsTimeout;
 
+	string username, password, address;
+	
 	void keyPressed(int key);
 	void keyReleased(int key);
 	void mouseMoved(int x, int y );
