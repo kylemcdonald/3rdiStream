@@ -26,6 +26,8 @@ void testApp::setup() {
 	useIds = cameraSettings.getValue("useIds", 0);
 	gpsTimeout = cameraSettings.getValue("gpsTimeout", 1.);
 	rotateImage = cameraSettings.getValue("rotateImage", 0);
+	
+	ofLog(OF_LOG_VERBOSE, "rotating images: " + ofToString(rotateImage));
 
 	string apn;
 	bool useAgps = cameraSettings.tagExists("apn");
