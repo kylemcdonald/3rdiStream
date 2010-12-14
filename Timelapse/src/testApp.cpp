@@ -20,11 +20,11 @@ void testApp::setup() {
 	useIds = cameraSettings.getValue("useIds", 0);
 	gpsTimeout = cameraSettings.getValue("gpsTimeout", 1.);
 	rotateImage = cameraSettings.getValue("rotateImage", 0);
-	
+
 	string apn;
 	bool useAgps = cameraSettings.tagExists("apn");
-    if(useAgps) {
-        apn = cameraSettings.getValue("apn", "");
+	if(useAgps) {
+		apn = cameraSettings.getValue("apn", "");
 	}
 	cameraSettings.popTag();
 
@@ -51,21 +51,19 @@ void testApp::setup() {
 
 	startCapture();
 
-	/*
-	 ofxXmlSettings serverSettings;
-	 serverSettings.loadFile("serverSettings.xml");
-	 string address = serverSettings.getValue("address", "");
-	 string username = serverSettings.getValue("username", "");
-	 string password = serverSettings.getValue("password", "");
-	 ofLog(OF_LOG_VERBOSE, "Using FTP server " + username + "@" + address + " password: " + password);
-	 ftpUpdate.setup(address, username, password);
+	ofxXmlSettings serverSettings;
+	serverSettings.loadFile("serverSettings.xml");
+	string address = serverSettings.getValue("address", "");
+	string username = serverSettings.getValue("username", "");
+	string password = serverSettings.getValue("password", "");
+	ofLog(OF_LOG_VERBOSE, "Using FTP server " + username + "@" + address + " password: " + password);
+	ftpUpdate.setup(address, username, password);
 
-	 ofxXmlSettings transferSettings;
-	 transferSettings.loadFile("transferSettings.xml");
-	 string localDirectory = transferSettings.getValue("localDirectory", "");
-	 string remoteDirectory = transferSettings.getValue("remoteDirectory", "");
-	 ftpUpdate.update(localDirectory, remoteDirectory);
-	 */
+	ofxXmlSettings transferSettings;
+	transferSettings.loadFile("transferSettings.xml");
+	string localDirectory = transferSettings.getValue("localDirectory", "");
+	string remoteDirectory = transferSettings.getValue("remoteDirectory", "");
+	ftpUpdate.update(localDirectory, remoteDirectory);
 
 #ifdef USE_NETBOOK
 	gps.setup(useAgps, apn);
