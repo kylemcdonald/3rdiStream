@@ -1,12 +1,12 @@
 <netbook>
 	<deviceId>1</deviceId>
 	<resize>4</resize>
-	<photoInterval>60</photoInterval>
-	<uploadInterval>60</uploadInterval>
+	<photoInterval>10</photoInterval>
+	<uploadInterval>10</uploadInterval>
 	<photoTimeout>15</photoTimeout>
 	<useIds>1</useIds>
 	<gpsTimeout>15</gpsTimeout>
-    <rotateImage>1</rotateImage>
+	<rotateImage>1</rotateImage>
 </netbook>
 <debug>
 	<deviceId>2</deviceId>

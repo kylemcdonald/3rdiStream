@@ -1,5 +1,11 @@
 #include "testApp.h"
 
+testApp::~testApp() {
+#ifdef USE_NETBOOK
+		ids.CloseCamera();
+#endif
+}
+
 void testApp::setup() {
 	ofDisableArbTex();
 
@@ -36,6 +42,9 @@ void testApp::setup() {
 	if(useIds) {
 		camWidth = 3264;
 		camHeight = 2448;
+#ifdef USE_NETBOOK
+		ids.OpenCamera();
+#endif
 	} else {
 		camera.listDevices();
 		camWidth = 640;
@@ -108,9 +117,7 @@ void testApp::startCapture() {
 	if(!capturing) {
 		bool success = false;
 		if(useIds) {
-#ifdef USE_NETBOOK
-			success = ids.OpenCamera();
-#endif
+			success = true;
 		} else {
 			camera.setDeviceID(deviceId);
 			success = camera.initGrabber(camWidth, camHeight);
@@ -154,11 +161,7 @@ void testApp::grabFrame() {
 }
 
 void testApp::stopCapture() {
-	if(useIds) {
-#ifdef USE_NETBOOK
-		ids.CloseCamera();
-#endif
-	} else {
+	if(!useIds) {
 		camera.close();
 	}
 	capturing = false;
