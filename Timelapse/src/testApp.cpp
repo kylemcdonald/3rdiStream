@@ -140,6 +140,7 @@ void testApp::grabFrame() {
 		if(useIds) {
 #ifdef USE_NETBOOK
 			ids.snapImage(lastFrame);
+			shutterSound.play();
 #endif
 			waitingTime = ofGetElapsedTimef() - startWaiting;
 			ofLog(OF_LOG_VERBOSE, "Grabbed from via IDS API." + ofToString(waitingTime));
