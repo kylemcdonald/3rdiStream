@@ -8,6 +8,8 @@ testApp::~testApp() {
 
 void testApp::setup() {
 	ofDisableArbTex();
+	
+	shutterSound.loadSound("shutterSound.wav");
 
 	ofSetLogLevel(OF_LOG_VERBOSE);
 
@@ -147,6 +149,7 @@ void testApp::grabFrame() {
 			camera.grabFrame();
 
 			if(camera.isFrameNew()) {
+				shutterSound.play();
 				ofLog(OF_LOG_VERBOSE, "Copying frame to lastFrame.");
 				lastFrame.setFromPixels(camera.getPixels(), camWidth, camHeight, OF_IMAGE_COLOR);
 				saveLastFrame();
