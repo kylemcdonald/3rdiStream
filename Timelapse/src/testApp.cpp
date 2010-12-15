@@ -8,6 +8,8 @@ testApp::~testApp() {
 
 void testApp::setup() {
 	ofDisableArbTex();
+	
+	shutterSound.loadSound("shutterSound.wav");
 
 	ofSetLogLevel(OF_LOG_VERBOSE);
 
@@ -148,6 +150,7 @@ void testApp::grabFrame() {
 			camera.grabFrame();
 
 			if(camera.isFrameNew()) {
+				shutterSound.play();
 				ofLog(OF_LOG_VERBOSE, "Copying frame to lastFrame.");
 				lastFrame.setFromPixels(camera.getPixels(), camWidth, camHeight, OF_IMAGE_COLOR);
 				saveLastFrame();
@@ -196,7 +199,7 @@ bool testApp::makeExivScript(string scriptFile) {
 	(int) gpsData.lonMinutes << "/1 " <<
 	(int) (fmodf(gpsData.lonMinutes, 1) * 60) << "/1" << endl;
 	out << "set Exif.GPSInfo.GPSAltitudeRef Byte " << (gpsData.altitude > 0 ? "0" : "1") << endl;
-	out << "set Exif.GPSInfo.GPSAltitude Rational " << (int) (absf(gpsData.altitude)) << "/1" << endl;
+	out << "set Exif.GPSInfo.GPSAltitude Rational " << (int) (fabsf(gpsData.altitude)) << "/1" << endl;
 	out.close();
 	return true;
 }
