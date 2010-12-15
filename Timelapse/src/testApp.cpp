@@ -196,7 +196,7 @@ bool testApp::makeExivScript(string scriptFile) {
 	(int) gpsData.lonMinutes << "/1 " <<
 	(int) (fmodf(gpsData.lonMinutes, 1) * 60) << "/1" << endl;
 	out << "set Exif.GPSInfo.GPSAltitudeRef Byte " << (gpsData.altitude > 0 ? "0" : "1") << endl;
-	out << "set Exif.GPSInfo.GPSAltitude Rational " << (int) (gpsData.altitude) << "/1" << endl;
+	out << "set Exif.GPSInfo.GPSAltitude Rational " << (int) (absf(gpsData.altitude)) << "/1" << endl;
 	out.close();
 	return true;
 }
