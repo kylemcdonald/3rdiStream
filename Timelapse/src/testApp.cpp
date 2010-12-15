@@ -44,9 +44,6 @@ void testApp::setup() {
 	if(useIds) {
 		camWidth = 3264;
 		camHeight = 2448;
-#ifdef USE_NETBOOK
-		ids.OpenCamera();
-#endif
 	} else {
 		camera.listDevices();
 		camWidth = 640;
@@ -119,7 +116,9 @@ void testApp::startCapture() {
 	if(!capturing) {
 		bool success = false;
 		if(useIds) {
-			success = true;
+#ifdef USE_NETBOOK
+			success = ids.OpenCamera();
+#endif
 		} else {
 			camera.setDeviceID(deviceId);
 			success = camera.initGrabber(camWidth, camHeight);
@@ -163,7 +162,11 @@ void testApp::grabFrame() {
 }
 
 void testApp::stopCapture() {
-	if(!useIds) {
+	if(useIds) {
+#ifdef USE_NETBOOK
+		ids.CloseCamera();
+#endif
+	} else {
 		camera.close();
 	}
 	capturing = false;
@@ -196,7 +199,7 @@ bool testApp::makeExivScript(string scriptFile) {
 	(int) gpsData.lonMinutes << "/1 " <<
 	(int) (fmodf(gpsData.lonMinutes, 1) * 60) << "/1" << endl;
 	out << "set Exif.GPSInfo.GPSAltitudeRef Byte " << (gpsData.altitude > 0 ? "0" : "1") << endl;
-	out << "set Exif.GPSInfo.GPSAltitude Rational " << (int) (absf(gpsData.altitude)) << "/1" << endl;
+	out << "set Exif.GPSInfo.GPSAltitude Rational " << (int) (fabsf(gpsData.altitude)) << "/1" << endl;
 	out.close();
 	return true;
 }
