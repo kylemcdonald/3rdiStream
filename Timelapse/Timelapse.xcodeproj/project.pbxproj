@@ -108,6 +108,7 @@
 		270E9B2212A245C400CF9061 /* typecheck-gcc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "typecheck-gcc.h"; path = "../../../addons/ofxCurl/src/include/curl/typecheck-gcc.h"; sourceTree = SOURCE_ROOT; };
 		270E9B2312A245C400CF9061 /* types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = types.h; path = ../../../addons/ofxCurl/src/include/curl/types.h; sourceTree = SOURCE_ROOT; };
 		270E9BBE12A2A5B300CF9061 /* ofxFileHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxFileHelper.h; path = ../../../addons/ofxFileHelper/src/ofxFileHelper/ofxFileHelper.h; sourceTree = SOURCE_ROOT; };
+		27B8D15612BA0BB600D6C83C /* ofxSerial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSerial.h; sourceTree = "<group>"; };
 		27F19F9D12B643E8008C451F /* Instructions.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Instructions.txt; sourceTree = "<group>"; };
 		27F19F9E12B643E8008C451F /* install.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = install.xml; sourceTree = "<group>"; };
 		27F19FA012B643E8008C451F /* ofxThread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxThread.cpp; sourceTree = "<group>"; };
@@ -557,6 +558,7 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				27B8D15612BA0BB600D6C83C /* ofxSerial.h */,
 				27F1A08512B662B6008C451F /* GpsData.h */,
 				27F1A08612B662B6008C451F /* GpsLog.h */,
 				270E998212A1C27400CF9061 /* DelayTimer.h */,

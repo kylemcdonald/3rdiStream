@@ -51,8 +51,8 @@ protected:
 	    cmd += "\r\n";
 		unsigned char* cmduc = new unsigned char[cmd.size()];
 		memcpy(cmduc, cmd.c_str(), cmd.size());
-		gpsSerialControl.flush();
 		gpsSerialControl.writeBytes(cmduc, cmd.size());
+		gpsSerialControl.flush();
 		delete [] cmduc;
 	}
 public:
