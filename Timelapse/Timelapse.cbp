@@ -132,6 +132,7 @@
 		<Unit filename="src\GpsData.h" />
 		<Unit filename="src\GpsLog.h" />
 		<Unit filename="src\main.cpp" />
+		<Unit filename="src\ofxSerial.h" />
 		<Unit filename="src\testApp.cpp" />
 		<Unit filename="src\testApp.h" />
 		<Unit filename="..\addons\ofxIds\include\uEye.h" />

@@ -2,22 +2,22 @@
 
 #include "ofxThread.h"
 #include "GpsData.h"
-#include "ofSerial.h"
+#include "ofxSerial.h"
 
 #define SERIAL_READLINE_SLEEP 10
 
 class GpsLog : public ofxThread {
 protected:
-	ofSerial gpsSerialData, gpsSerialControl;
-	
+	ofxSerial gpsSerialData, gpsSerialControl;
+
 	bool useAgps;
 	string apn;
-	
+
 	GpsData workingData, stableData;
 	string nmeaMessage;
 
 	float lastInput;
-	
+
 	void threadedFunction() {
 		while(isThreadRunning()) {
 			nmeaMessage = readLine();
@@ -55,7 +55,7 @@ protected:
 		gpsSerialControl.writeBytes(cmduc, cmd.size());
 		delete [] cmduc;
 	}
-public:	
+public:
 	~GpsLog() {
 		gpsSerialData.close();
 		gpsSerialControl.close();
@@ -63,7 +63,7 @@ public:
 	void setup(bool useAgps, string apn) {
 	    this->useAgps = useAgps;
 	    this->apn = apn;
-	    
+
 	    gpsSerialControl.enumerateDevices();
 		if(!gpsSerialControl.setup("COM5", 9600)) {
 			ofLog(OF_LOG_FATAL_ERROR, "Cannot connect to the GPS control.");
