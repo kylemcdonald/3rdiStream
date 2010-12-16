@@ -12,9 +12,9 @@ class ofxSerial : public ofSerial {
 protected:
 	string portName;
 	int baudRate;
-	
+
 	void checkInited() {
-		if(!bInited) {
+		if(!ofSerial::bInited) {
 			ofLog(OF_LOG_VERBOSE, "ofxSerial not inited, reconnecting to " + portName + ":" + ofToString(baudRate));
 			ofSerial::close();
 			ofSerial::setup(portName, baudRate);
@@ -24,7 +24,7 @@ public:
 	bool setup(string portName, int baudRate) {
 		this->portName = portName;
 		this->baudRate = baudRate;
-		ofSerial::setup(portName, baudRate);
+		return ofSerial::setup(portName, baudRate);
 	}
 	int readBytes(unsigned char* buffer, int length) {
 		checkInited();

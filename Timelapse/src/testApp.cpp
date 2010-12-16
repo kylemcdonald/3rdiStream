@@ -8,7 +8,7 @@ testApp::~testApp() {
 
 void testApp::setup() {
 	ofDisableArbTex();
-	
+
 	shutterSound.loadSound("shutterSound.wav");
 
 	ofSetLogLevel(OF_LOG_VERBOSE);
@@ -28,7 +28,7 @@ void testApp::setup() {
 	useIds = cameraSettings.getValue("useIds", 0);
 	gpsTimeout = cameraSettings.getValue("gpsTimeout", 1.);
 	rotateImage = cameraSettings.getValue("rotateImage", 0);
-	
+
 	ofLog(OF_LOG_VERBOSE, "rotating images: " + ofToString(rotateImage));
 
 	string apn;
@@ -81,6 +81,7 @@ void testApp::setup() {
 #ifdef USE_NETBOOK
 	gps.setup(useAgps, apn);
 	gps.startThread();
+	ofLog(OF_LOG_VERBOSE, "finished setting up serial (gps)");
 #endif
 }
 
@@ -104,7 +105,7 @@ void testApp::startUpload() {
 		string basePath = RESIZED_DIR + daystamp + "/" + timestamp + ".jpg";
 		string localPath = ofToDataPath(basePath);
 		// curl --ftp-create-dirs -T data/3rdiStream/timestamp.jpg -u user:pass server/3rdiStream/resized/daystamp
-		string curlCommand = "curl --ftp-create-dirs -T " + localPath + " -u " + username + ":" + password + " ftp://" + address + "/" + basePath; 
+		string curlCommand = "curl --ftp-create-dirs -T " + localPath + " -u " + username + ":" + password + " ftp://" + address + "/" + basePath;
 		if(system(curlCommand.c_str()) != 0) {
 			ofLog(OF_LOG_VERBOSE, "failed to upload: " + curlCommand);
 			// make a note here that things weren't uploaded. maybe a hidden file.
@@ -116,6 +117,7 @@ void testApp::startUpload() {
 
 void testApp::startCapture() {
 	if(!capturing) {
+	    ofLog(OF_LOG_VERBOSE, "starting capture");
 		bool success = false;
 		if(useIds) {
 #ifdef USE_NETBOOK
@@ -291,6 +293,8 @@ void testApp::draw() {
 		ofSetColor(255, 0, 0);
 		ofDrawBitmapString("restarting GPS control (" + ofToString((int) gps.idleTime()) + "s)", 10, 140);
 		gps.startStream();
+		ofLog(OF_LOG_VERBOSE, "Sleeping for a second to give GPS a chance to wake up.");
+		ofSleepMillis(1000);
 	}
 #endif
 }
