@@ -4,7 +4,7 @@
 #include "GpsData.h"
 #include "ofxSerial.h"
 
-#define SERIAL_READLINE_SLEEP 10
+#define SERIAL_READLINE_SLEEP 50
 
 class GpsLog : public ofxThread {
 protected:

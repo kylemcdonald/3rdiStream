@@ -238,7 +238,7 @@ void testApp::saveLastFrame() {
 	string originalLocation = originalBase + "/" + timestamp + ".jpg";
 	lastFrame.saveImage(originalLocation);
 
-	lastFrameResized.setFromPixels(lastFrame.getPixels(), lastFrame.getWidth(), lastFrame.getHeight(), OF_IMAGE_COLOR);
+	lastFrameResized.setFromPixels(lastFrame.getPixels(), lastFrame.getWidth(), lastFrame.getHeight(), OF_IMAGE_COLOR, false);
 	lastFrameResized.resize(resizedWidth, resizedHeight);
 
 	string resizedBase = RESIZED_DIR + daystamp;
@@ -291,10 +291,8 @@ void testApp::draw() {
 	ofDrawBitmapString("position: " + gpsPosition.str(), 10, 120);
 	if(gps.idleTime() > gpsTimeout) {
 		ofSetColor(255, 0, 0);
-		ofDrawBitmapString("restarting GPS control (" + ofToString((int) gps.idleTime()) + "s)", 10, 140);
-		gps.startStream();
-		ofLog(OF_LOG_VERBOSE, "Sleeping for a second to give GPS a chance to wake up.");
-		ofSleepMillis(1000);
+		//ofDrawBitmapString("restarting GPS control (" + ofToString((int) gps.idleTime()) + "s)", 10, 140);
+		//gps.startStream();
 	}
 #endif
 }
