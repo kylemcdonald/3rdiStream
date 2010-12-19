@@ -141,6 +141,11 @@ void testApp::grabFrame() {
 
 		if(useIds) {
 #ifdef USE_NETBOOK
+			// sleep for a second while the camera warms up
+			// should help avoid black photos
+			cout << "Camera is warming up." << endl;
+			ofSleepMillis(1000);
+			// grab a photo from the camera
 			ids.snapImage(lastFrame);
 			shutterSound.play();
 #endif

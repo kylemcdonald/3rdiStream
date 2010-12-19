@@ -42,4 +42,15 @@ public:
 		checkInited();
 		flush(flushIn, flushOut);
 	}
+	void enumerateDevices() {
+#ifdef TARGET_WIN32
+		enumerateWin32Ports();
+		printf("ofSerial: listing devices (%i total)\n", nPorts);
+		for (int i = 0; i < nPorts; i++){
+			cout << "device " << i << " -- " << portNamesFriendly[i] << endl;
+		}
+#else
+		ofSerial::enumerateDevices();
+#endif
+	}
 };

@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 #include "DelayTimer.h"
-#include "GpsLog.h"
+#include "ofxGps.h"
 #include "ofxXmlSettings.h"
 #include "ofxFileHelper.h"
 #include "Poco/DateTimeFormatter.h"
@@ -23,12 +23,12 @@ public:
 	void draw();
 
 	void startUpload();
-	
+
 	void startCapture();
 	void stopCapture();
 	void grabFrame();
 	void saveLastFrame();
-	
+
 	string daystamp, timestamp;
 	string getDaystamp();
 	string getTimestamp();
@@ -62,13 +62,13 @@ public:
 	float photoTimeout;
 	bool rotateImage;
 
-	GpsLog gps;
+	GpsLogger gps;
 	float gpsTimeout;
 
 	string username, password, address;
-	
+
 	ofSoundPlayer shutterSound;
-	
+
 	void keyPressed(int key);
 	void keyReleased(int key);
 	void mouseMoved(int x, int y );

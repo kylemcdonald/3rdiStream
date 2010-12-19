@@ -60,7 +60,6 @@
 			<Add directory="..\..\..\libs\openFrameworks\video" />
 			<Add directory="..\..\..\libs\openFrameworks\communication" />
 			<Add directory="..\..\..\libs\poco\include" />
-			<Add directory="..\..\..\addons\ofxCurl\src\include_codeblocks" />
 			<Add directory="..\..\..\addons\ofxXmlSettings\src" />
 			<Add directory="..\..\..\addons\ofxXmlSettings\libs" />
 			<Add directory="..\..\..\addons\ofxFileHelper\src\ofxFileHelper" />
@@ -68,6 +67,7 @@
 			<Add directory="..\addons\ofxIds\include" />
 			<Add directory="..\addons\ofxIds\src" />
 			<Add directory="..\addons\ofxImage\src" />
+			<Add directory="..\addons\ofxGps\src" />
 		</Compiler>
 		<Linker>
 			<Add option="../../../libs/FreeImage/lib/win_cb/FreeImage.lib" />
@@ -98,8 +98,6 @@
 			<Add option="-lwsock32" />
 			<Add option="-lws2_32" />
 			<Add option="-lIphlpapi" />
-			<Add library="..\..\..\addons\ofxCurl\lib\win\libcurl.a" />
-			<Add library="..\..\..\addons\ofxCurl\lib\win\libcurldll.a" />
 			<Add library="..\addons\ofxIds\lib\uEye_api.lib" />
 			<Add library="..\addons\ofxIds\lib\uEye_tools.lib" />
 		</Linker>
@@ -108,16 +106,6 @@
 			<Add after='cmd /c if not exist &quot;$(PROJECT_DIR)bin/data&quot; mkdir &quot;$(PROJECT_DIR)bin/data&quot;' />
 			<Mode after="always" />
 		</ExtraCommands>
-		<Unit filename="..\..\..\addons\ofxCurl\src\include_codeblocks\curl.h" />
-		<Unit filename="..\..\..\addons\ofxCurl\src\include_codeblocks\curlbuild.h" />
-		<Unit filename="..\..\..\addons\ofxCurl\src\include_codeblocks\curlrules.h" />
-		<Unit filename="..\..\..\addons\ofxCurl\src\include_codeblocks\curlver.h" />
-		<Unit filename="..\..\..\addons\ofxCurl\src\include_codeblocks\easy.h" />
-		<Unit filename="..\..\..\addons\ofxCurl\src\include_codeblocks\mprintf.h" />
-		<Unit filename="..\..\..\addons\ofxCurl\src\include_codeblocks\multi.h" />
-		<Unit filename="..\..\..\addons\ofxCurl\src\include_codeblocks\stdcheaders.h" />
-		<Unit filename="..\..\..\addons\ofxCurl\src\include_codeblocks\typecheck-gcc.h" />
-		<Unit filename="..\..\..\addons\ofxCurl\src\include_codeblocks\types.h" />
 		<Unit filename="..\..\..\addons\ofxFileHelper\src\ofxFileHelper\ofxFileHelper.h" />
 		<Unit filename="..\..\..\addons\ofxThread\src\ofxThread.cpp" />
 		<Unit filename="..\..\..\addons\ofxThread\src\ofxThread.h" />
@@ -129,12 +117,13 @@
 		<Unit filename="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.h" />
 		<Unit filename="src\DelayTimer.h" />
 		<Unit filename="src\FtpUpdate.h" />
-		<Unit filename="src\GpsData.h" />
-		<Unit filename="src\GpsLog.h" />
 		<Unit filename="src\main.cpp" />
-		<Unit filename="src\ofxSerial.h" />
 		<Unit filename="src\testApp.cpp" />
 		<Unit filename="src\testApp.h" />
+		<Unit filename="..\addons\ofxGps\src\GpsData.h" />
+		<Unit filename="..\addons\ofxGps\src\GpsLogger.h" />
+		<Unit filename="..\addons\ofxGps\src\ofxGps.h" />
+		<Unit filename="..\addons\ofxGps\src\ofxSerial.h" />
 		<Unit filename="..\addons\ofxIds\include\uEye.h" />
 		<Unit filename="..\addons\ofxIds\include\uEyeCaptureInterface.h" />
 		<Unit filename="..\addons\ofxIds\include\uEye_tools.h" />

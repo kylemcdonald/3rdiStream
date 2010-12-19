@@ -8,26 +8,26 @@ ofxIds::ofxIds() {
 void ofxIds::snapImage(ofImage& img) {
     // set software trigger mode
     is_SetExternalTrigger(m_hCam, IS_SET_TRIGGER_SOFTWARE);
-    
+
     // capture a single frame. IS_WAIT is required for uEye XS
     ofLog(OF_LOG_VERBOSE, "is_FreezeVideo()");
     is_FreezeVideo(m_hCam, IS_WAIT);
-    
+
     img.allocate(m_nSizeX, m_nSizeY, OF_IMAGE_COLOR);
     int n = m_nSizeX * m_nSizeY;
-    
+
     int rawBpp = 4;
     int rawCur = 0;
     unsigned char* rawPixels = (unsigned char*) m_pcImageMemory;
-    
+
     int imgBpp = 3;
     int imgCur = 0;
     unsigned char* imgPixels = img.getPixels();
-    
+
     for(int i = 0; i < n; i++) {
-        imgPixels[imgCur + 0] = rawPixels[rawCur + 2];
+        imgPixels[imgCur + 0] = rawPixels[rawCur + 0];
         imgPixels[imgCur + 1] = rawPixels[rawCur + 1];
-        imgPixels[imgCur + 2] = rawPixels[rawCur + 0];
+        imgPixels[imgCur + 2] = rawPixels[rawCur + 2];
         imgCur += imgBpp;
         rawCur += rawBpp;
     }
@@ -52,12 +52,12 @@ BOOL ofxIds::OpenCamera()
     {
         // set software trigger mode
         is_SetExternalTrigger(m_hCam, IS_SET_TRIGGER_SOFTWARE);
-        
+
         is_GetCameraInfo( m_hCam, &m_ci);
 
         // retrieve original image size
         is_GetSensorInfo( m_hCam, &m_si);
-        
+
         GetMaxImageSize(&m_nSizeX, &m_nSizeY);
 
         /*
@@ -87,7 +87,7 @@ BOOL ofxIds::OpenCamera()
             // do the whitebalance once on the first acquisitioned image only on color cameras
             if( m_si.nColorMode == IS_COLORMODE_BAYER )
                 nRet = is_SetWhiteBalance( m_hCam, IS_SET_WB_AUTO_ENABLE_ONCE);
-                
+
             cout << "IDS: capturing at " << m_nSizeX << "x" << m_nSizeY << endl;
         }   // end if( nRet == IS_SUCCESS )
     }   // end if( nRet == IS_SUCCESS )
@@ -117,35 +117,35 @@ BOOL ofxIds::CloseCamera()
 
 INT ofxIds::InitCamera (HIDS *hCam, HWND hWnd)
 {
-    INT nRet = is_InitCamera (hCam, hWnd);	
+    INT nRet = is_InitCamera (hCam, hWnd);
     /************************************************************************************************/
     /*                                                                                              */
     /*  If the camera returns with "IS_STARTER_FW_UPLOAD_NEEDED", an upload of a new firmware       */
     /*  is necessary. This upload can take several seconds. We recommend to check the required      */
     /*  time with the function is_GetDuration().                                                    */
     /*                                                                                              */
-    /*  In this case, the camera can only be opened if the flag "IS_ALLOW_STARTER_FW_UPLOAD"        */ 
+    /*  In this case, the camera can only be opened if the flag "IS_ALLOW_STARTER_FW_UPLOAD"        */
     /*  is "OR"-ed to m_hCam. This flag allows an automatic upload of the firmware.                 */
-    /*                                                                                              */                        
+    /*                                                                                              */
     /************************************************************************************************/
     if (nRet == IS_STARTER_FW_UPLOAD_NEEDED)
     {
         // Time for the firmware upload = 25 seconds by default
         INT nUploadTime = 25000;
         is_GetDuration (NULL, IS_SE_STARTER_FW_UPLOAD, &nUploadTime);
-    
+
         char Str1[] = { "This camera requires a new firmware. The upload will take about" };
         char Str2[] = { "seconds. Please wait ..." };
         char Str3[100];
         sprintf (Str3, "%s %d %s", Str1, nUploadTime / 1000, Str2);
         MessageBox (NULL, Str3, "", MB_ICONWARNING);
-    
+
         // Try again to open the camera. This time we allow the automatic upload of the firmware by
         // specifying "IS_ALLOW_STARTER_FIRMWARE_UPLOAD"
-        *hCam = (HIDS) (((INT)*hCam) | IS_ALLOW_STARTER_FW_UPLOAD); 
-        nRet = is_InitCamera (hCam, hWnd);   
+        *hCam = (HIDS) (((INT)*hCam) | IS_ALLOW_STARTER_FW_UPLOAD);
+        nRet = is_InitCamera (hCam, hWnd);
     }
-    
+
     return nRet;
 }
 
@@ -157,8 +157,8 @@ void ofxIds::GetMaxImageSize(INT *pnSizeX, INT *pnSizeY)
     INT nAOISupported = 0;
     BOOL bAOISupported = TRUE;
     if (is_ImageFormat(m_hCam,
-                       IMGFRMT_CMD_GET_ARBITRARY_AOI_SUPPORTED, 
-                       (void*)&nAOISupported, 
+                       IMGFRMT_CMD_GET_ARBITRARY_AOI_SUPPORTED,
+                       (void*)&nAOISupported,
                        sizeof(nAOISupported)) == IS_SUCCESS)
     {
         bAOISupported = (nAOISupported != 0);
@@ -216,7 +216,7 @@ int ofxIds::InitDisplayMode()
                 break;
             }
             else
-                m_nDispModeSel = e_disp_mode_bitmap; 
+                m_nDispModeSel = e_disp_mode_bitmap;
 
         case e_disp_mode_bitmap:
             nRet = is_SetDisplayMode( m_hCam, IS_SET_DM_DIB);
