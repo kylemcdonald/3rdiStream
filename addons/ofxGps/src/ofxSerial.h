@@ -53,4 +53,21 @@ public:
 		ofSerial::enumerateDevices();
 #endif
 	}
+	int availabe() {
+#ifdef TARGET_WIN32
+	COMSTAT stat;
+	DWORD err;
+	if(hComm!=INVALID_HANDLE_VALUE){
+		if(!ClearCommError(hComm, &err, &stat)){
+			return 0;
+		} else {
+			return stat.cbInQue;
+		}
+	} else {
+		return 0;
+	}
+#else
+	return ofSerial::available();
+#endif
+	}
 };

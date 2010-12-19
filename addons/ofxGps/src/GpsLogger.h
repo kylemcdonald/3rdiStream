@@ -22,7 +22,9 @@ protected:
 		while(isThreadRunning()) {
 			nmeaMessage = readLine();
 			if(workingData.parseOutput(nmeaMessage)) {
+				lock();
 				stableData = workingData;
+				unlock();
 			}
 		}
 	}
@@ -48,11 +50,29 @@ protected:
 		return available;
 	}
 	void sendControl(string cmd) {
-		cmd += "\r\n";
+		cmd += "\r\n\0";
 		unsigned char* cmduc = new unsigned char[cmd.size()];
 		memcpy(cmduc, cmd.c_str(), cmd.size());
 		gpsSerialControl.writeBytes(cmduc, cmd.size());
 		delete [] cmduc;
+		/*
+		ofLog(OF_LOG_VERBOSE, "Flushing GPS Control output.");
+		gpsSerialControl.flush(false, true);
+		ofLog(OF_LOG_VERBOSE, "Done flushing.");
+		*/
+	}
+	void listenControl(string msg) {
+		string ret;
+		ofLog(OF_LOG_VERBOSE, "Waiting for some kind of response from GPS Control.");
+		/*while(!gpsSerialControl.available()) {
+		}*/
+		while(gpsSerialControl.available()) {
+			ofLog(OF_LOG_VERBOSE, "Reading a byte from GPS Control.");
+			char cur = gpsSerialControl.readByte();
+			ret += cur;
+			ofSleepMillis(100);
+			ofLog(OF_LOG_VERBOSE, "Received '" + ret + "' from GPS Control.");
+		}
 	}
 public:
 	~GpsLogger() {
@@ -64,13 +84,17 @@ public:
 		this->apn = apn;
 
 		gpsSerialControl.enumerateDevices();
-		startStream();
 		lastInput = ofGetElapsedTimef();
+		startStream();
+		startThread(true);
 	}
-	const GpsData& getData() {
-		return stableData;
+	GpsData getData() {
+		lock();
+		GpsData curData = stableData;
+		unlock();
+		return curData;
 	}
-	const string& getLatestMessage() {
+	string getLatestMessage() {
 		return nmeaMessage;
 	}
 	float idleTime() const {
@@ -86,11 +110,14 @@ public:
 
 		if(useAgps) {
 			sendControl("AT_OGPSP = 7,2");
+			listenControl("OK\r\n");
 			sendControl("AT_OGPSCONT = 1, \"IP\", \"" + apn + "\"");
+			listenControl("OK\r\n");
 			sendControl("AT_OGPSLS = 1, \"http://supl.nokia.com\"");
+			listenControl("OK\r\n");
 		}
 		sendControl("AT_OGPS = 2");
-		//gpsSerialControl.flush();
+		listenControl("OK\r\n");
 
 		ofLog(OF_LOG_VERBOSE, "Done setting up GPS control.");
 

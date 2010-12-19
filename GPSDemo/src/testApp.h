@@ -11,6 +11,7 @@ public:
 	void draw();
 
 	GpsLogger gps;
+	ofxSerial gpsControl;
 
 	void keyPressed(int key);
 	void keyReleased(int key);
