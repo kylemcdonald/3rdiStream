@@ -77,7 +77,7 @@ public:
 		return ofGetElapsedTimef() - lastInput;
 	}
 	void startStream() {
-		if(!gpsSerialControl.setup("COM5", 9600)) {
+		if(!gpsSerialControl.setup("COM3", 9600)) {
 			ofLog(OF_LOG_FATAL_ERROR, "Cannot connect to the GPS control.");
 			return;
 		} else {

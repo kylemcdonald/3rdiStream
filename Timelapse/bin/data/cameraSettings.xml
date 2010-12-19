@@ -7,6 +7,7 @@
 	<useIds>1</useIds>
 	<gpsTimeout>15</gpsTimeout>
 	<rotateImage>0</rotateImage>
+	<apn>ISP.CINGULAR</apn>
 </netbook>
 <debug>
 	<deviceId>2</deviceId>
@@ -16,5 +17,5 @@
 	<photoTimeout>4</photoTimeout>
 	<useIds>0</useIds>
 	<gpsTimeout>10</gpsTimeout>
-    <rotateImage>0</rotateImage>
+	<rotateImage>0</rotateImage>
 </debug>
