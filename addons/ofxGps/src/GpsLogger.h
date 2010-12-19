@@ -86,8 +86,8 @@ public:
 
 		if(useAgps) {
 			sendControl("AT_OGPSP = 7,2");
-			sendControl("AT_OGPSCONT = 1, IP, " + apn);
-			sendControl("AT_OGPSLS = 1, http://supl.nokia.com");
+			sendControl("AT_OGPSCONT = 1, \"IP\", \"" + apn + "\"");
+			sendControl("AT_OGPSLS = 1, \"http://supl.nokia.com\"");
 		}
 		sendControl("AT_OGPS = 2");
 		//gpsSerialControl.flush();
