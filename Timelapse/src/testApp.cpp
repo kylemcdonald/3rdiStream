@@ -299,7 +299,7 @@ void testApp::draw() {
 	ofDrawBitmapString("position: " + gpsPosition.str(), 10, 120);
 	if(gps.idleTime() > gpsTimeout) {
 		ofSetColor(255, 0, 0);
-		//ofDrawBitmapString("restarting GPS control (" + ofToString((int) gps.idleTime()) + "s)", 10, 140);
+		ofDrawBitmapString("GPS control it out (" + ofToString((int) gps.idleTime()) + "s)", 10, 140);
 		//gps.startStream();
 	}
 #endif
