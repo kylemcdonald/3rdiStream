@@ -50,28 +50,24 @@ protected:
 		return available;
 	}
 	void sendControl(string cmd) {
-		cmd += "\r\n\0";
-		unsigned char* cmduc = new unsigned char[cmd.size()];
-		memcpy(cmduc, cmd.c_str(), cmd.size());
-		gpsSerialControl.writeBytes(cmduc, cmd.size());
-		delete [] cmduc;
-		/*
-		ofLog(OF_LOG_VERBOSE, "Flushing GPS Control output.");
-		gpsSerialControl.flush(false, true);
-		ofLog(OF_LOG_VERBOSE, "Done flushing.");
-		*/
-	}
-	void listenControl(string msg) {
-		string ret;
-		ofLog(OF_LOG_VERBOSE, "Waiting for some kind of response from GPS Control.");
-		/*while(!gpsSerialControl.available()) {
-		}*/
-		while(gpsSerialControl.available()) {
-			ofLog(OF_LOG_VERBOSE, "Reading a byte from GPS Control.");
-			char cur = gpsSerialControl.readByte();
-			ret += cur;
+		cmd += "\r\n";
+
+		char* curMsg = new char[msg.size()];
+		memcpy(curMsg, msg.c_str(), msg.size());
+		gpsControl.writeBytes((unsigned char*) curMsg, msg.size());
+		delete curMsg;
+
+		while(!gpsControl.xavailable()) {
+			ofLog(OF_LOG_VERBOSE, "Waiting for a response from GPS Control.");
 			ofSleepMillis(100);
-			ofLog(OF_LOG_VERBOSE, "Received '" + ret + "' from GPS Control.");
+		}
+
+		while(gpsControl.xavailable()) {
+			int size = gpsControl.xavailable();
+			char* buffer = new char[size + 1];
+			gpsControl.readBytes((unsigned char*) buffer, size);
+			buffer[size] = '\0';
+			ofLog(OF_LOG_VERBOSE, "Received a response from GPS Control.");
 		}
 	}
 public:
@@ -108,16 +104,13 @@ public:
 			ofLog(OF_LOG_VERBOSE, "Connected to the GPS control.");
 		}
 
+		sendControl("AT_OGPS=0");
 		if(useAgps) {
-			sendControl("AT_OGPSP = 7,2");
-			listenControl("OK\r\n");
-			sendControl("AT_OGPSCONT = 1, \"IP\", \"" + apn + "\"");
-			listenControl("OK\r\n");
-			sendControl("AT_OGPSLS = 1, \"http://supl.nokia.com\"");
-			listenControl("OK\r\n");
+			sendControl("AT_OGPSP = 7,2\r\n");
+			sendControl("AT_OGPSCONT = 1, \"IP\", \"ISP.CINGULAR\"\r\n");
+			sendControl("AT_OGPSLS = 1, \"http://supl.nokia.com\"\r\n");
 		}
-		sendControl("AT_OGPS = 2");
-		listenControl("OK\r\n");
+		sendControl("AT_OGPS=2");
 
 		ofLog(OF_LOG_VERBOSE, "Done setting up GPS control.");
 
@@ -125,7 +118,6 @@ public:
 
 		ofLog(OF_LOG_VERBOSE, "Closed GPS control.");
 
-		gpsSerialData.close();
 		if(!gpsSerialData.setup("COM4", 9600)) {
 			ofLog(OF_LOG_FATAL_ERROR, "Cannot connect to the GPS data stream.");
 		} else {

@@ -7,11 +7,14 @@
 class testApp : public ofBaseApp {
 public:
 	void setup();
+	~testApp();
 	void update();
 	void draw();
 
+	void send(string msg);
+
 	GpsLogger gps;
-	ofxSerial gpsControl;
+	ofxSerial gpsControl, gpsDataSerial;
 
 	void keyPressed(int key);
 	void keyReleased(int key);

@@ -53,21 +53,25 @@ public:
 		ofSerial::enumerateDevices();
 #endif
 	}
-	int availabe() {
+	int xavailable() {
 #ifdef TARGET_WIN32
-	COMSTAT stat;
-	DWORD err;
-	if(hComm!=INVALID_HANDLE_VALUE){
-		if(!ClearCommError(hComm, &err, &stat)){
-			return 0;
+		COMSTAT stat;
+		DWORD err;
+		if(hComm!=INVALID_HANDLE_VALUE){
+			//ofLog(OF_LOG_VERBOSE, "hComm is a valid handle value");
+			if(!ClearCommError(hComm, &err, &stat)){
+				//ofLog(OF_LOG_VERBOSE, "!ClearCommError");
+				return 0;
+			} else {
+				//ofLog(OF_LOG_VERBOSE, "ClearCommError");
+				return stat.cbInQue;
+			}
 		} else {
-			return stat.cbInQue;
+			//ofLog(OF_LOG_VERBOSE, "hComm == INVALID_HANDLE_VALUE: " + ofToString((int) hComm));
+			return 0;
 		}
-	} else {
-		return 0;
-	}
 #else
-	return ofSerial::available();
+		return ofSerial::available();
 #endif
 	}
 };
