@@ -36,6 +36,10 @@ void testApp::setup() {
 	if(useAgps) {
 		apn = cameraSettings.getValue("apn", "");
 	}
+
+	string controlPort = cameraSettings.getValue("controlPort", "");
+	string dataPort = cameraSettings.getValue("dataPort", "");
+
 	cameraSettings.popTag();
 
 	ofSetFrameRate(1000. / cameraFrameWait);
@@ -79,8 +83,7 @@ void testApp::setup() {
 	*/
 
 #ifdef USE_NETBOOK
-	gps.setup(useAgps, apn);
-	gps.startThread();
+	gps.setup(controlPort, dataPort, useAgps, apn);
 	ofLog(OF_LOG_VERBOSE, "finished setting up serial (gps)");
 #endif
 }

@@ -25,9 +25,7 @@ protected:
 		while(isThreadRunning()) {
 			nmeaMessage = readLine();
 			if(workingData.parseOutput(nmeaMessage)) {
-				lock();
 				stableData = workingData;
-				unlock();
 			}
 		}
 	}
@@ -96,9 +94,7 @@ public:
 		startThread(true);
 	}
 	GpsData getData() {
-		lock();
 		GpsData curData = stableData;
-		unlock();
 		return curData;
 	}
 	string getLatestMessage() {

@@ -7,6 +7,8 @@
 	<useIds>1</useIds>
 	<gpsTimeout>15</gpsTimeout>
 	<rotateImage>0</rotateImage>
+	<controlPort>COM3</controlPort>
+	<dataPort>COM5</dataPort>
 	<apn>ISP.CINGULAR</apn>
 </netbook>
 <debug>
