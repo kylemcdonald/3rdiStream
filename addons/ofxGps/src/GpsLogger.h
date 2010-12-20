@@ -12,6 +12,7 @@ protected:
 
 	bool useAgps;
 	string apn;
+	string controlPort, dataPort;
 
 	GpsData workingData, stableData;
 	string nmeaMessage;
@@ -19,6 +20,8 @@ protected:
 	float lastInput;
 
 	void threadedFunction() {
+		// opening serial ports inside this thread instead
+		startStream();
 		while(isThreadRunning()) {
 			nmeaMessage = readLine();
 			if(workingData.parseOutput(nmeaMessage)) {
@@ -28,60 +31,68 @@ protected:
 			}
 		}
 	}
+	string readAvailable() {
+		int size = gpsSerialData.xavailable();
+		unsigned char* buffer = new unsigned char[size + 1];
+		gpsSerialData.readBytes(buffer, size);
+		buffer[size] = '\0';
+		stringstream cur;
+		cur << buffer;
+		return cur.str();
+	}
 	string readLine() {
 		string available = "";
 		char curChar = '\0';
 		while(isThreadRunning() && curChar != '\n') {
-			if(gpsSerialData.available()) {
+			if(gpsSerialData.xavailable()) {
 				lastInput = ofGetElapsedTimef();
-				gpsSerialData.readBytes((unsigned char*) &curChar, 1);
+				curChar = (unsigned char) gpsSerialData.readByte();
 				if(curChar == '\n') {
 					break;
 				} else {
 					available += curChar;
 				}
 			} else {
-				while(gpsSerialControl.available()) {
-					gpsSerialControl.readByte();
-				}
 				ofSleepMillis(SERIAL_READLINE_SLEEP);
 			}
 		}
 		return available;
 	}
-	void sendControl(string cmd) {
-		cmd += "\r\n";
+	void sendControl(string msg) {
+		msg += "\r\n";
 
 		char* curMsg = new char[msg.size()];
 		memcpy(curMsg, msg.c_str(), msg.size());
-		gpsControl.writeBytes((unsigned char*) curMsg, msg.size());
+		gpsSerialControl.writeBytes((unsigned char*) curMsg, msg.size());
 		delete curMsg;
 
-		while(!gpsControl.xavailable()) {
+		while(!gpsSerialControl.xavailable()) {
 			ofLog(OF_LOG_VERBOSE, "Waiting for a response from GPS Control.");
 			ofSleepMillis(100);
 		}
 
-		while(gpsControl.xavailable()) {
-			int size = gpsControl.xavailable();
+		while(gpsSerialControl.xavailable()) {
+			int size = gpsSerialControl.xavailable();
 			char* buffer = new char[size + 1];
-			gpsControl.readBytes((unsigned char*) buffer, size);
+			gpsSerialControl.readBytes((unsigned char*) buffer, size);
 			buffer[size] = '\0';
 			ofLog(OF_LOG_VERBOSE, "Received a response from GPS Control.");
 		}
 	}
 public:
 	~GpsLogger() {
+		stopThread();
 		gpsSerialData.close();
 		gpsSerialControl.close();
 	}
-	void setup(bool useAgps, string apn) {
+	void setup(string controlPort, string dataPort, bool useAgps, string apn) {
+		this->controlPort = controlPort;
+		this->dataPort = dataPort;
 		this->useAgps = useAgps;
 		this->apn = apn;
 
 		gpsSerialControl.enumerateDevices();
 		lastInput = ofGetElapsedTimef();
-		startStream();
 		startThread(true);
 	}
 	GpsData getData() {
@@ -97,7 +108,7 @@ public:
 		return ofGetElapsedTimef() - lastInput;
 	}
 	void startStream() {
-		if(!gpsSerialControl.setup("COM3", 9600)) {
+		if(!gpsSerialControl.setup(controlPort, 9600)) {
 			ofLog(OF_LOG_FATAL_ERROR, "Cannot connect to the GPS control.");
 			return;
 		} else {
@@ -106,9 +117,9 @@ public:
 
 		sendControl("AT_OGPS=0");
 		if(useAgps) {
-			sendControl("AT_OGPSP = 7,2\r\n");
-			sendControl("AT_OGPSCONT = 1, \"IP\", \"ISP.CINGULAR\"\r\n");
-			sendControl("AT_OGPSLS = 1, \"http://supl.nokia.com\"\r\n");
+			sendControl("AT_OGPSP = 7,2");
+			sendControl("AT_OGPSCONT = 1, \"IP\", \"" + apn + "\"");
+			sendControl("AT_OGPSLS = 1, \"http://supl.nokia.com\"");
 		}
 		sendControl("AT_OGPS=2");
 
@@ -118,7 +129,7 @@ public:
 
 		ofLog(OF_LOG_VERBOSE, "Closed GPS control.");
 
-		if(!gpsSerialData.setup("COM4", 9600)) {
+		if(!gpsSerialData.setup(dataPort, 9600)) {
 			ofLog(OF_LOG_FATAL_ERROR, "Cannot connect to the GPS data stream.");
 		} else {
 			ofLog(OF_LOG_VERBOSE, "Connected to internal GPS stream.");

@@ -7,7 +7,6 @@
 class testApp : public ofBaseApp {
 public:
 	void setup();
-	~testApp();
 	void update();
 	void draw();
 
