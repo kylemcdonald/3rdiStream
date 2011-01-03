@@ -144,12 +144,16 @@ void testApp::grabFrame() {
 
 		if(useIds) {
 #ifdef USE_NETBOOK
-			// sleep for a second while the camera warms up
-			// should help avoid black photos
-			cout << "Camera is warming up." << endl;
-			ofSleepMillis(1000);
 			// grab a photo from the camera
-			ids.snapImage(lastFrame);
+			bool valid = ids.snapImage(lastFrame);
+			for(int i = 0; !valid && i < maxCameraTries; i++) {
+			    ofLog(OF_LOG_VERBOSE, "invalid (black) frame, trying again");
+			    //ids.CloseCamera();
+			    //ofSleepMillis(500);
+			    //ids.OpenCamera();
+			    ofSleepMillis(500);
+					valid = ids.snapImage(lastFrame);
+			}
 			shutterSound.play();
 #endif
 			waitingTime = ofGetElapsedTimef() - startWaiting;
@@ -299,7 +303,7 @@ void testApp::draw() {
 	ofDrawBitmapString("position: " + gpsPosition.str(), 10, 120);
 	if(gps.idleTime() > gpsTimeout) {
 		ofSetColor(255, 0, 0);
-		ofDrawBitmapString("GPS control it out (" + ofToString((int) gps.idleTime()) + "s)", 10, 140);
+		ofDrawBitmapString("GPS control is dead (" + ofToString((int) gps.idleTime()) + "s)", 10, 140);
 		//gps.startStream();
 	}
 #endif

@@ -39,6 +39,7 @@ public:
 	bool useIds;
 #ifdef USE_NETBOOK
 	ofxIds ids;
+	static const int maxCameraTries = 5;
 #endif
 
 	ofVideoGrabber camera;

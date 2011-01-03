@@ -5,13 +5,20 @@ ofxIds::ofxIds() {
     m_hwndDisp = NULL;
 }
 
-void ofxIds::snapImage(ofImage& img) {
+bool ofxIds::snapImage(ofImage& img) {
+    ofSleepMillis(1000);
+
     // set software trigger mode
     is_SetExternalTrigger(m_hCam, IS_SET_TRIGGER_SOFTWARE);
 
+    ofSleepMillis(1000);
+
     // capture a single frame. IS_WAIT is required for uEye XS
-    ofLog(OF_LOG_VERBOSE, "is_FreezeVideo()");
-    is_FreezeVideo(m_hCam, IS_WAIT);
+		ofLog(OF_LOG_VERBOSE, "is_FreezeVideo()");
+		is_FreezeVideo(m_hCam, IS_WAIT);
+
+		ofLog(OF_LOG_VERBOSE, "Captured a frame, giving the data time to transfer.");
+		ofSleepMillis(2000);
 
     img.allocate(m_nSizeX, m_nSizeY, OF_IMAGE_COLOR);
     int n = m_nSizeX * m_nSizeY;
@@ -24,13 +31,17 @@ void ofxIds::snapImage(ofImage& img) {
     int imgCur = 0;
     unsigned char* imgPixels = img.getPixels();
 
+    int total = 0;
     for(int i = 0; i < n; i++) {
         imgPixels[imgCur + 0] = rawPixels[rawCur + 0];
         imgPixels[imgCur + 1] = rawPixels[rawCur + 1];
         imgPixels[imgCur + 2] = rawPixels[rawCur + 2];
+        total += rawPixels[rawCur + 0] + rawPixels[rawCur + 1] + rawPixels[rawCur + 2];
         imgCur += imgBpp;
         rawCur += rawBpp;
     }
+
+    return (total != 0);
 }
 
 int ofxIds::getWidth() {

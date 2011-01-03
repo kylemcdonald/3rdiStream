@@ -24,6 +24,7 @@ public:
 	bool setup(string portName, int baudRate) {
 		this->portName = portName;
 		this->baudRate = baudRate;
+		ofLog(OF_LOG_VERBOSE, "Attempting to open " + portName);
 		return ofSerial::setup(portName, baudRate);
 	}
 	int readBytes(unsigned char* buffer, int length) {
